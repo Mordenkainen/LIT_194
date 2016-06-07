@@ -1,17 +1,8 @@
 package com.m4thg33k.lit.gui;
 
-import com.m4thg33k.lit.client.gui.GuiImprovedChest;
-import com.m4thg33k.lit.client.gui.GuiImprovedCraftingTable;
-import com.m4thg33k.lit.client.gui.GuiImprovedFurnace;
-import com.m4thg33k.lit.client.gui.GuiSolidGenerator;
-import com.m4thg33k.lit.inventory.ContainerImprovedChest;
-import com.m4thg33k.lit.inventory.ContainerImprovedCraftingTable;
-import com.m4thg33k.lit.inventory.ContainerImprovedFurnace;
-import com.m4thg33k.lit.inventory.ContainerSolidGenerator;
-import com.m4thg33k.lit.tiles.TileImprovedChest;
-import com.m4thg33k.lit.tiles.TileImprovedCraftingTable;
-import com.m4thg33k.lit.tiles.TileImprovedFurnace;
-import com.m4thg33k.lit.tiles.TileSolidGenerator;
+import com.m4thg33k.lit.client.gui.*;
+import com.m4thg33k.lit.inventory.*;
+import com.m4thg33k.lit.tiles.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,6 +14,7 @@ public class LitGuiHandler implements IGuiHandler{
     public static final int IMPROVED_CHEST_GUI = 1;
     public static final int IMPROVED_CRAFTING_TABLE = 2;
     public static final int SOLID_GENERATOR_GUI = 3;
+    public static final int IMPROVED_WORKTABLE = 4;
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -36,6 +28,8 @@ public class LitGuiHandler implements IGuiHandler{
                 return new ContainerImprovedCraftingTable(player.inventory,(TileImprovedCraftingTable)world.getTileEntity(new BlockPos(x,y,z)));
             case 3:
                 return new ContainerSolidGenerator(player.inventory,(TileSolidGenerator)world.getTileEntity(new BlockPos(x,y,z)));
+            case 4:
+                return new ContainerImprovedWorktable(player.inventory, (TileImprovedWorktable)world.getTileEntity(new BlockPos(x,y,z)));
             default:
                 return null;
         }
@@ -53,6 +47,8 @@ public class LitGuiHandler implements IGuiHandler{
                 return new GuiImprovedCraftingTable(player.inventory,(TileImprovedCraftingTable)world.getTileEntity(new BlockPos(x,y,z)));
             case 3:
                 return new GuiSolidGenerator(player.inventory,(TileSolidGenerator)world.getTileEntity(new BlockPos(x,y,z)));
+            case 4:
+                return new GuiImprovedWorktable(player.inventory, (TileImprovedWorktable)world.getTileEntity(new BlockPos(x,y,z)));
             default:
                 return null;
         }

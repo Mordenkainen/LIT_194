@@ -4,7 +4,7 @@ import com.m4thg33k.lit.api.furnace.FurnaceTypes;
 import com.m4thg33k.lit.core.util.ChatHelper;
 import com.m4thg33k.lit.core.util.LogHelper;
 import com.m4thg33k.lit.lib.Constants;
-import com.m4thg33k.lit.network.packets.LITPackets;
+import com.m4thg33k.lit.network.LITNetwork;
 import com.m4thg33k.lit.network.packets.PacketNBT;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -494,7 +494,8 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
         {
             NBTTagCompound tag = new NBTTagCompound();
             writeToNBT(tag);
-            LITPackets.INSTANCE.sendToAllAround(new PacketNBT(pos, tag), new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32));
+            LITNetwork.sendToAllAround(new PacketNBT(pos,tag), new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), pos.getX(),pos.getY(),pos.getZ(),32));
+//            LITPackets.INSTANCE.sendToAllAround(new PacketNBT(pos, tag), new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32));
             LogHelper.info("Sending furnace packet");
         }
     }

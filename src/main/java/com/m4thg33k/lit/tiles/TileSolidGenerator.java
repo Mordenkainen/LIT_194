@@ -5,7 +5,7 @@ import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import com.m4thg33k.lit.core.util.LogHelper;
 import com.m4thg33k.lit.lib.Names;
-import com.m4thg33k.lit.network.packets.LITPackets;
+import com.m4thg33k.lit.network.LITNetwork;
 import com.m4thg33k.lit.network.packets.PacketNBT;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -231,7 +231,8 @@ public class TileSolidGenerator extends TileEntity implements IEnergyProvider,IT
         {
             NBTTagCompound tag = new NBTTagCompound();
             writeToNBT(tag);
-            LITPackets.INSTANCE.sendToAllAround(new PacketNBT(pos,tag),new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(),pos.getX(),pos.getY(),pos.getZ(),32));
+            LITNetwork.sendToAllAround(new PacketNBT(pos,tag), new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), pos.getX(),pos.getY(),pos.getZ(),32));
+//            LITPackets.INSTANCE.sendToAllAround(new PacketNBT(pos,tag),new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(),pos.getX(),pos.getY(),pos.getZ(),32));
 //            LogHelper.info("Sending update");
         }
     }

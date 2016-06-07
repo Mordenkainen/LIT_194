@@ -5,6 +5,7 @@ import com.m4thg33k.lit.core.util.LogHelper;
 import com.m4thg33k.lit.gui.LitGuiHandler;
 import com.m4thg33k.lit.lib.Names;
 import com.m4thg33k.lit.tiles.TileImprovedCraftingTable;
+import com.m4thg33k.lit.tiles.TileImprovedWorktable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -54,7 +55,8 @@ public class ImprovedCraftingTableBlock extends BaseBlock{
                 LogHelper.info("Tile has " + n + " non-empty slots");
                 return true;
             }
-            playerIn.openGui(LIT.instance, LitGuiHandler.IMPROVED_CRAFTING_TABLE,worldIn,pos.getX(),pos.getY(),pos.getZ());
+            playerIn.openGui(LIT.instance, LitGuiHandler.IMPROVED_WORKTABLE,worldIn,pos.getX(),pos.getY(),pos.getZ());
+//            playerIn.openGui(LIT.instance, LitGuiHandler.IMPROVED_CRAFTING_TABLE,worldIn,pos.getX(),pos.getY(),pos.getZ());
         }
 
         return true;
@@ -67,7 +69,8 @@ public class ImprovedCraftingTableBlock extends BaseBlock{
 
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileImprovedCraftingTable();
+        return new TileImprovedWorktable();
+        //return new TileImprovedCraftingTable();
     }
 
     @Override
@@ -105,7 +108,9 @@ public class ImprovedCraftingTableBlock extends BaseBlock{
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-        TileImprovedCraftingTable tile = (TileImprovedCraftingTable)worldIn.getTileEntity(pos);
+        TileImprovedWorktable tile = (TileImprovedWorktable)worldIn.getTileEntity(pos);
         tile.setFacing(placer.getHorizontalFacing().getOpposite());
+//        TileImprovedCraftingTable tile = (TileImprovedCraftingTable)worldIn.getTileEntity(pos);
+//        tile.setFacing(placer.getHorizontalFacing().getOpposite());
     }
 }

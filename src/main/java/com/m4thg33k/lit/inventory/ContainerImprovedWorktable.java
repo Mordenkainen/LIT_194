@@ -1,19 +1,25 @@
 package com.m4thg33k.lit.inventory;
 
+import com.m4thg33k.lit.client.gui.GuiImprovedWorktable;
 import com.m4thg33k.lit.tiles.TileImprovedWorktable;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerImprovedWorktable extends Container {
+public class ContainerImprovedWorktable extends ContainerBase<TileImprovedWorktable> {
 
     public InventoryCraftingPersists craftMatrix;
     public IInventory craftingResult;
 
-    protected TileImprovedWorktable tile;
 
     public ContainerImprovedWorktable(InventoryPlayer playerInventory, TileImprovedWorktable tile)
     {
-        this.tile = tile;
+        super(tile);
 
         craftingResult = new InventoryCraftResult();
         craftMatrix = new InventoryCraftingPersists(this, tile, 3, 3);
@@ -38,8 +44,37 @@ public class ContainerImprovedWorktable extends Container {
         this.onCraftMatrixChanged(this.craftMatrix);
     }
 
-    public void addPlayerInventory(InventoryPlayer playerInventory, int x, int y)
+    @Override
+    public void onCraftMatrixChanged(IInventory inventoryIn) {
+        this.craftingResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.world));
+    }
+
+    @Override
+    public boolean canMergeSlot(ItemStack stack, Slot slotIn) {
+        return slotIn.inventory != this.craftingResult && super.canMergeSlot(stack, slotIn);
+    }
+
+
+    public void updateGUI()
     {
-        
+        if (this.tileEntity.getWorld().isRemote)
+        {
+            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    ContainerImprovedWorktable.clientGuiUpdate();
+                }
+            });
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static void clientGuiUpdate()
+    {
+        GuiScreen screen = Minecraft.getMinecraft().currentScreen;
+        if (screen instanceof GuiImprovedWorktable)
+        {
+            ((GuiImprovedWorktable) screen).updateDisplay();
+        }
     }
 }

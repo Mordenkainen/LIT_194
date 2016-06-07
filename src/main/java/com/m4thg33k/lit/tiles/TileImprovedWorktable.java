@@ -167,4 +167,9 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
     public ITextComponent getDisplayName() {
         return new TextComponentString(getName());
     }
+
+    public void setFacing(EnumFacing facing)
+    {
+        this.facing = facing;
+    }
 }

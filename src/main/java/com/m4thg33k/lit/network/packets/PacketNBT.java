@@ -14,6 +14,11 @@ public class PacketNBT extends BaseThreadsafePacket {
     public BlockPos pos;
     public NBTTagCompound compound;
 
+    public PacketNBT()
+    {
+        this(new BlockPos(0,0,0),new NBTTagCompound());
+    }
+
     public PacketNBT(BlockPos pos, NBTTagCompound tagCompound)
     {
         this.pos = pos;

@@ -1,5 +1,6 @@
 package com.m4thg33k.lit.client.gui;
 
+import com.m4thg33k.lit.inventory.ContainerImprovedWorktable;
 import com.m4thg33k.lit.tiles.TileImprovedWorktable;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -12,7 +13,7 @@ public class GuiImprovedWorktable extends GuiContainer{
 
     private InventoryPlayer playerInventory;
 
-    public GuiImprovedCraftingTable(InventoryPlayer inventoryPlayer, TileImprovedWorktable tileImprovedWorktable)
+    public GuiImprovedWorktable(InventoryPlayer inventoryPlayer, TileImprovedWorktable tileImprovedWorktable)
     {
         super(new ContainerImprovedWorktable(inventoryPlayer, tileImprovedWorktable));
 
@@ -37,4 +38,6 @@ public class GuiImprovedWorktable extends GuiContainer{
         int j = (this.height = this.ySize)/2;
         this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
     }
+
+    public void updateDisplay() {}
 }
