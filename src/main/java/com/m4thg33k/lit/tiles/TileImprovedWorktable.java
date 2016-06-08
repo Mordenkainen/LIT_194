@@ -1,5 +1,6 @@
 package com.m4thg33k.lit.tiles;
 
+import com.m4thg33k.lit.core.util.LogHelper;
 import com.m4thg33k.lit.lib.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -278,7 +279,7 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
                 list.appendTag(stackTag);
             }
         }
-        tagCompound.setTag("Items", tagCompound);
+        tagCompound.setTag("Items", list);
 
         if (result != null)
         {
@@ -287,6 +288,7 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
             tagCompound.setTag("Result", resultTag);
         }
 
+        LogHelper.info("Sending Worktable Update Packet");
         return new SPacketUpdateTileEntity(pos, 0, tagCompound);
     }
 
