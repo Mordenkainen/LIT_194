@@ -31,6 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos;
+import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nullable;
 
@@ -74,7 +75,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
         this.inventory = new ItemStack[getSizeInventory()];
         this.numUpgradesInstalled = 0;
 
-        this.defaultName = type.getTypeName();
+        this.defaultName = WordUtils.capitalize(type.getTypeName());
 //        this.setCustomName(defaultName);
 
         if (this.upgradeCount > 0)
@@ -496,7 +497,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
             writeToNBT(tag);
             LITNetwork.sendToAllAround(new PacketNBT(pos,tag), new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), pos.getX(),pos.getY(),pos.getZ(),32));
 //            LITPackets.INSTANCE.sendToAllAround(new PacketNBT(pos, tag), new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32));
-            LogHelper.info("Sending furnace packet");
+//            LogHelper.info("Sending furnace packet");
         }
     }
 

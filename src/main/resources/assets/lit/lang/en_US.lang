@@ -24,6 +24,8 @@ tile.BetterFurnaceBlock_diamond.name=Diamond Furnace
 tile.BetterFurnaceBlock_redstone.name=Redstone Furnace
 tile.BetterFurnaceBlock_lapis.name=Lapis Furnace
 
+tile.ImprovedWorktableBlock.name=Improved Worktable
+
 #-------------------------------------------------------------------
 # Items
 #-------------------------------------------------------------------

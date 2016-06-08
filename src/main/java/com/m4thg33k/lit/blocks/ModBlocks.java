@@ -17,6 +17,8 @@ public class ModBlocks {
 
     public static BetterFurnaceBlock betterFurnaceBlock = new BetterFurnaceBlock();
 
+    public static ImprovedWorktableBlock improvedWorktableBlock = new ImprovedWorktableBlock();
+
     public static void createBlocks()
     {
         GameRegistry.register(improvedFurnaceBlock);
@@ -25,8 +27,8 @@ public class ModBlocks {
         GameRegistry.register(improvedChestBlock);
         GameRegistry.register(new ItemBlock(improvedChestBlock).setRegistryName(LIT.MODID,Names.IMPROVED_CHEST));
 
-        GameRegistry.register(improvedCraftingTableBlock);
-        GameRegistry.register(new ItemBlock(improvedCraftingTableBlock).setRegistryName(LIT.MODID,Names.IMPROVED_CRAFTING_TABLE));
+//        GameRegistry.register(improvedCraftingTableBlock);
+//        GameRegistry.register(new ItemBlock(improvedCraftingTableBlock).setRegistryName(LIT.MODID,Names.IMPROVED_CRAFTING_TABLE));
 
         GameRegistry.register(solidGeneratorBlock);
         GameRegistry.register(new ItemBlock(solidGeneratorBlock).setRegistryName(LIT.MODID,Names.SOLID_GENERATOR));
@@ -35,6 +37,9 @@ public class ModBlocks {
         GameRegistry.register(new ItemBlock(charcoalBlock).setRegistryName(LIT.MODID,Names.CHARCOAL_BLOCK));
 
         GameRegistry.register(betterFurnaceBlock);
+
+        GameRegistry.register(improvedWorktableBlock);
+        GameRegistry.register(new ItemBlock(improvedWorktableBlock).setRegistryName(LIT.MODID,Names.IMPROVED_WORKTABLE));
 
     }
 }

@@ -36,7 +36,7 @@ group= "com.m4thg33k.lit" // http://maven.apache.org/guides/mini/guide-naming-co
 archivesBaseName = "LittleInsignificantThings"
 
 minecraft {
-    version = "1.9.4-12.17.0.1940"
+    version = "1.9.4-12.17.0.1954"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.

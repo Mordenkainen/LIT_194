@@ -39,8 +39,10 @@ public class GuiSolidGenerator extends GuiContainer {
 
         GlStateManager.color(1.0f,1.0f,1.0f,1.0f);
 
-        int max = tileSolidGenerator.getMaxEnergyStored(EnumFacing.DOWN);
-        int stored = tileSolidGenerator.getEnergyStored(EnumFacing.DOWN);
+        int max = ((ContainerSolidGenerator)this.inventorySlots).getMaxEnergy();
+        int stored = ((ContainerSolidGenerator)this.inventorySlots).getStoredEnergy();
+//        int max = tileSolidGenerator.getMaxEnergyStored(EnumFacing.DOWN);
+//        int stored = tileSolidGenerator.getEnergyStored(EnumFacing.DOWN);
 
 //        String energy = "" + stored + "/" + max + " RF";
 //        this.fontRendererObj.drawString(energy,0,0,0x404040);

@@ -4,6 +4,10 @@ import com.m4thg33k.lit.lib.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
@@ -15,12 +19,12 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
 
 
     private int CRAFT_SLOT = 0;
-    private int CHEST_SLOT = 9;
-    private int INVENTORY_SIZE = 36;
+    protected int CHEST_SLOT = -1;
+    protected int INVENTORY_SIZE = 9;
 
-    protected IInventory craftingOutput = null;
+//    protected IInventory craftingOutput = null;
 
-    protected ItemStack result;
+    protected ItemStack result = null;
     protected ItemStack[] inventory = new ItemStack[INVENTORY_SIZE];
 
 
@@ -171,5 +175,152 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
     public void setFacing(EnumFacing facing)
     {
         this.facing = facing;
+    }
+
+    public EnumFacing getFacing()
+    {
+        return facing;
+    }
+
+    public ItemStack getResult()
+    {
+        return result;
+    }
+
+    public void setResult(ItemStack stack)
+    {
+        if (stack == null)
+        {
+            result = null;
+            return;
+        }
+        result = stack.copy();
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
+
+        NBTTagList list = compound.getTagList("Items",10);
+        for (int i=0; i<list.tagCount(); i++)
+        {
+            NBTTagCompound stackTag = list.getCompoundTagAt(i);
+            int slot = stackTag.getByte("Slot") & 0xff;
+            if (isValidSlot(slot))
+            {
+                inventory[slot] = ItemStack.loadItemStackFromNBT(stackTag);
+            }
+        }
+
+        if (compound.hasKey("CustomName"))
+        {
+            this.customName = compound.getString("CustomName");
+        }
+
+        if (compound.hasKey("Facing"))
+        {
+            this.facing = EnumFacing.values()[compound.getInteger("Facing")];
+        }
+
+        if (compound.hasKey("Result"))
+        {
+            this.result = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("Result"));
+        }
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        NBTTagCompound tagCompound =  super.writeToNBT(compound);
+
+        NBTTagList list = new NBTTagList();
+        for (int i=0; i<getSizeInventory(); i++)
+        {
+            if (inventory[i] != null)
+            {
+                NBTTagCompound stackTag = new NBTTagCompound();
+                stackTag.setByte("Slot",(byte)i);
+                inventory[i].writeToNBT(stackTag);
+                list.appendTag(stackTag);
+            }
+        }
+        tagCompound.setTag("Items",list);
+
+        tagCompound.setInteger("Facing", facing.ordinal());
+
+        if (this.hasCustomName())
+        {
+            tagCompound.setString("CustomName",customName);
+        }
+
+        if (result != null)
+        {
+            NBTTagCompound resultTag = new NBTTagCompound();
+            result.writeToNBT(resultTag);
+            tagCompound.setTag("Result",resultTag);
+        }
+
+        return tagCompound;
+    }
+
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        NBTTagCompound tagCompound = new NBTTagCompound();
+        NBTTagList list = new NBTTagList();
+
+        for (int i=CRAFT_SLOT; i < CRAFT_SLOT+9; i++)
+        {
+            if (inventory[i] != null)
+            {
+                NBTTagCompound stackTag = new NBTTagCompound();
+                stackTag.setByte("Slot", (byte)i);
+                inventory[i].writeToNBT(stackTag);
+                list.appendTag(stackTag);
+            }
+        }
+        tagCompound.setTag("Items", tagCompound);
+
+        if (result != null)
+        {
+            NBTTagCompound resultTag = new NBTTagCompound();
+            result.writeToNBT(resultTag);
+            tagCompound.setTag("Result", resultTag);
+        }
+
+        return new SPacketUpdateTileEntity(pos, 0, tagCompound);
+    }
+
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        return this.writeToNBT(new NBTTagCompound());
+
+    }
+
+    @Override
+    public void handleUpdateTag(NBTTagCompound tag) {
+        this.readFromNBT(tag);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        NBTTagList tagList = pkt.getNbtCompound().getTagList("Items",10);
+        for (int i=0; i<tagList.tagCount(); i++)
+        {
+            NBTTagCompound stackTag = tagList.getCompoundTagAt(i);
+            int slot = stackTag.getByte("Slot") & 0xff;
+            if (isValidSlot(slot))
+            {
+                inventory[slot] = ItemStack.loadItemStackFromNBT(stackTag);
+            }
+        }
+
+        if (pkt.getNbtCompound().hasKey("Result"))
+        {
+            result = ItemStack.loadItemStackFromNBT(pkt.getNbtCompound().getCompoundTag("Result"));
+        }
+        else
+        {
+            result = null;
+        }
     }
 }

@@ -18,7 +18,7 @@ public class ItemRenderRegister {
 
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.improvedChestBlock),0,new ModelResourceLocation(LIT.MODID+":"+Names.IMPROVED_CHEST,"inventory"));
 
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.improvedCraftingTableBlock),0,new ModelResourceLocation(LIT.MODID+":"+Names.IMPROVED_CRAFTING_TABLE,"inventory"));
+//        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.improvedCraftingTableBlock),0,new ModelResourceLocation(LIT.MODID+":"+Names.IMPROVED_CRAFTING_TABLE,"inventory"));
 
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.solidGeneratorBlock),0,new ModelResourceLocation(LIT.MODID+":"+Names.SOLID_GENERATOR,"facing=north,on=false"));
 
@@ -34,5 +34,7 @@ public class ItemRenderRegister {
         {
             ModelLoader.setCustomModelResourceLocation(ModItems.itemFurnaceUpgrade,i,new ModelResourceLocation(LIT.MODID+":"+Names.FURNACE_UPGRADE,"meta="+i));
         }
+
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.improvedWorktableBlock),0,new ModelResourceLocation(LIT.MODID+":"+Names.IMPROVED_WORKTABLE,"inventory"));
     }
 }

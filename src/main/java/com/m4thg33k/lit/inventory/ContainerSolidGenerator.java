@@ -4,14 +4,16 @@ import com.m4thg33k.lit.tiles.TileSolidGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 
 public class ContainerSolidGenerator extends Container{
 
     private TileSolidGenerator te;
-    public int storedEnergy;
-    public int maxEnergy;
+    public int storedEnergy = 0;
+    public int maxEnergy = 0;
 
     public ContainerSolidGenerator(InventoryPlayer playerInventory, TileSolidGenerator tileSolidGenerator)
     {
@@ -96,4 +98,60 @@ public class ContainerSolidGenerator extends Container{
         }
         return previous;
     }
+
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+
+        int newStoredEnergy = te.getEnergyStored(EnumFacing.DOWN);
+        int newMaxEnergy = te.getMaxEnergyStored(EnumFacing.DOWN);
+
+        for (IContainerListener listener : this.listeners)
+        {
+            if (storedEnergy != newStoredEnergy)
+            {
+                listener.sendProgressBarUpdate(this, 0, newStoredEnergy/1000);
+                listener.sendProgressBarUpdate(this, 1, newStoredEnergy%1000);
+            }
+            if (maxEnergy != newMaxEnergy)
+            {
+                listener.sendProgressBarUpdate(this, 2, newMaxEnergy/1000);
+                listener.sendProgressBarUpdate(this, 3, newMaxEnergy%1000);
+            }
+        }
+
+        this.storedEnergy = newStoredEnergy;
+        this.maxEnergy = newMaxEnergy;
+    }
+
+    @Override
+    public void updateProgressBar(int id, int data) {
+        switch (id)
+        {
+            case 0:
+                storedEnergy = data*1000;
+                break;
+            case 1:
+                storedEnergy += data;
+                break;
+            case 2:
+                maxEnergy = data*1000;
+                break;
+            case 3:
+                maxEnergy += data;
+                break;
+            default:
+        }
+    }
+
+    public int getStoredEnergy()
+    {
+        return storedEnergy;
+    }
+
+    public int getMaxEnergy()
+    {
+        return maxEnergy;
+    }
 }
+

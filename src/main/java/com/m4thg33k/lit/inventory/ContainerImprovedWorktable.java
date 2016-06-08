@@ -47,6 +47,7 @@ public class ContainerImprovedWorktable extends ContainerBase<TileImprovedWorkta
     @Override
     public void onCraftMatrixChanged(IInventory inventoryIn) {
         this.craftingResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.world));
+        this.tileEntity.setResult(this.craftingResult.getStackInSlot(0));
     }
 
     @Override
