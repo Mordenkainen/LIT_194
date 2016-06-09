@@ -31,7 +31,7 @@ repositories {
 //end for JEI stuff
 
 
-version = "1.9.4-2.0.0"
+version = "1.9.4-2.0.1"
 group= "com.m4thg33k.lit" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "LittleInsignificantThings"
 
