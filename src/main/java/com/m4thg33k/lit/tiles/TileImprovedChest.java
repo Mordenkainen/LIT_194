@@ -318,6 +318,7 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
     public void setFacing(EnumFacing facing)
     {
         this.facing = facing;
+        markDirty();
     }
 
     @Override
@@ -330,20 +331,31 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
     @Override
     public NBTTagCompound getUpdateTag() {
         NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setString("Type",getType().getTypeName());
-        nbt.setByte("Facing",(byte)facing.ordinal());
+        this.writeToNBT(nbt);
+//        nbt.setString("Type",getType().getTypeName());
+//        nbt.setInteger("Facing",facing.ordinal());
         return nbt;
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-        if (pkt.getTileEntityType() == 0)
-        {
-            NBTTagCompound compound = pkt.getNbtCompound();
-            type = ChestTypes.getTypeByName(compound.getString("Type"));
-            facing = EnumFacing.values()[compound.getByte("Facing")];
-        }
+    public void handleUpdateTag(NBTTagCompound tag) {
+        this.readFromNBT(tag);
+//        type = ChestTypes.getTypeByName(tag.getString("Type"));
+//        facing = EnumFacing.values()[tag.getInteger("Facing")];
     }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+//        if (pkt.getTileEntityType() == 0)
+//        {
+            NBTTagCompound compound = pkt.getNbtCompound();
+            this.readFromNBT(compound);
+//            type = ChestTypes.getTypeByName(compound.getString("Type"));
+//            facing = EnumFacing.values()[compound.getInteger("Facing")];
+//        }
+    }
+
+
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
