@@ -32,8 +32,8 @@ public class InventorySortHelper {
         sortItemStackArray(blocks);
         sortItemStackArray(items);
 
-        combineLikeStacks(blocks);
-        combineLikeStacks(items);
+        blocks = combineLikeStacks(blocks);
+        items = combineLikeStacks(items);
 
         toReturn.addAll(blocks);
         toReturn.addAll(items);
@@ -208,7 +208,7 @@ public class InventorySortHelper {
             else
             {
                 ItemStack leftovers = mergeItemStack(thisStack, toReturn.get(index-1));
-                if (leftovers!=null)
+                if (leftovers!=null && leftovers.stackSize != 0)
                 {
                     toReturn.add(leftovers);
                     index++;
@@ -256,16 +256,7 @@ public class InventorySortHelper {
         {
             return "";
         }
-        String string = stack.getItem().getRegistryName().getResourceDomain();
-        return string;
-//        String string = stack.getUnlocalizedName();
-//        LogHelper.info(string);
-//        int colon = string.indexOf(":");
-//        if (colon == -1)
-//        {
-//            return "";
-//        }
-//        return string.substring(0,colon);
+        return stack.getItem().getRegistryName().getResourceDomain();
     }
 
     private static ArrayList<ItemStack> getItemList(IInventory inventory)

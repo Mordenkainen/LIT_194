@@ -4,6 +4,8 @@ import com.m4thg33k.lit.LIT;
 import com.m4thg33k.lit.client.render.ModRenders;
 import com.m4thg33k.lit.client.render.registers.BlockRenderRegister;
 import com.m4thg33k.lit.client.render.registers.ItemRenderRegister;
+import com.m4thg33k.lit.core.event.LITClientEvents;
+import com.m4thg33k.lit.core.event.LITCommonEvents;
 import com.m4thg33k.lit.core.util.LogHelper;
 import com.m4thg33k.lit.network.LITNetwork;
 import com.m4thg33k.lit.network.packets.BasePacket;
@@ -31,6 +33,7 @@ public class ClientProxy extends CommonProxy {
 
         BlockRenderRegister.registerBlockRenderer();
         ModRenders.init();
+        MinecraftForge.EVENT_BUS.register(new LITClientEvents());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.m4thg33k.lit.api.chest;
 
+import com.m4thg33k.lit.LIT;
 import com.m4thg33k.lit.core.crafting.ChestRecipe;
 import com.m4thg33k.lit.core.util.LogHelper;
 import net.minecraft.init.Blocks;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 public class ChestTypes {
 
     public static final ArrayList<ChestTypes> allTypes = new ArrayList<ChestTypes>();
+
+    public static final ResourceLocation sortButtonLocation = new ResourceLocation(LIT.MODID, "textures/gui/sortButton.png");
 
     private String typeName;
     private int size;

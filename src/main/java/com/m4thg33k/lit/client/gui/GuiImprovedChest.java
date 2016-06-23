@@ -8,6 +8,7 @@ import javafx.scene.input.MouseButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
 import java.io.IOException;
@@ -49,7 +50,12 @@ public class GuiImprovedChest  extends GuiContainer{
         int x = (width-xSize)/2;
         int y = (height-ySize)/2;
         drawTexturedModalRect(x,y,0,0,xSize,ySize);
-        drawTexturedModalRect(guiLeft-8,guiTop,184,0,8,8);
+
+        ResourceLocation button = ChestTypes.sortButtonLocation;
+
+        this.mc.getTextureManager().bindTexture(button);
+        drawTexturedModalRect(x-8,y,0,0,8,8);
+//        drawTexturedModalRect(guiLeft-8,guiTop,0,0,8,8);
     }
 
     @Override
