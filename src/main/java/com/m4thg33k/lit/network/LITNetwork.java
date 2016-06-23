@@ -1,10 +1,7 @@
 package com.m4thg33k.lit.network;
 
 import com.m4thg33k.lit.LIT;
-import com.m4thg33k.lit.network.packets.BasePacket;
-import com.m4thg33k.lit.network.packets.BasePacketHandler;
-import com.m4thg33k.lit.network.packets.PacketLITCraftingUpdate;
-import com.m4thg33k.lit.network.packets.PacketNBT;
+import com.m4thg33k.lit.network.packets.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
@@ -53,6 +50,7 @@ public class LITNetwork{
         //register packets here
         registerPacketServer(PacketLITCraftingUpdate.class);
         registerPacketClient(PacketNBT.class);
+        registerPacketServer(PacketChestSorting.class);
     }
 
     public static void sendToAll(BasePacket packet)

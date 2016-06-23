@@ -1,8 +1,11 @@
 package com.m4thg33k.lit.tiles;
 
+import com.m4thg33k.lit.LIT;
 import com.m4thg33k.lit.api.chest.ChestTypes;
 import com.m4thg33k.lit.blocks.ModBlocks;
+import com.m4thg33k.lit.core.util.InventorySortHelper;
 import com.m4thg33k.lit.inventory.ContainerImprovedChest;
+import com.m4thg33k.lit.network.packets.PacketChestSorting;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -13,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.EnumFacing;
@@ -465,5 +467,27 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
         NBTTagCompound tagCompound = new NBTTagCompound();
         tagCompound.setTag("Items",list);
         return tagCompound;
+    }
+
+    public void performSort(int sortType, boolean forward)
+    {
+        ItemStack[] sorted;
+        switch (sortType)
+        {
+            case 1:
+                sorted = InventorySortHelper.sortByMod(this,forward);
+                break;
+            default:
+                sorted = InventorySortHelper.sortByBlocksAndItems(this, forward);
+        }
+        this.setContents(sorted);
+        markDirty();
+        worldObj.markAndNotifyBlock(pos,null,worldObj.getBlockState(pos), worldObj.getBlockState(pos),1);
+
+    }
+
+    public void prepareSort(int sortType, boolean forward)
+    {
+        LIT.proxy.sendPacketToServerOnly(new PacketChestSorting(pos,sortType,forward));
     }
 }

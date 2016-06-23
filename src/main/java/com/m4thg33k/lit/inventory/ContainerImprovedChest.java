@@ -1,6 +1,7 @@
 package com.m4thg33k.lit.inventory;
 
 import com.m4thg33k.lit.api.chest.ChestTypes;
+import com.m4thg33k.lit.tiles.TileImprovedChest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -8,13 +9,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerImprovedChest extends Container {
-
+public class ContainerImprovedChest extends Container{
     private ChestTypes type;
     private EntityPlayer player;
-    private IInventory chest;
+    private TileImprovedChest chest;
 
-    public ContainerImprovedChest(IInventory player, IInventory chest, ChestTypes type)
+    public ContainerImprovedChest(IInventory player, TileImprovedChest chest, ChestTypes type)
     {
         this.chest = chest;
         this.player = ((InventoryPlayer)player).player;
@@ -99,4 +99,5 @@ public class ContainerImprovedChest extends Container {
     {
         return type.getRowLength();
     }
+
 }
