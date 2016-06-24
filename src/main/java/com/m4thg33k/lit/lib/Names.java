@@ -10,6 +10,7 @@ public class Names {
     public static final String DEATH_BLOCK = "DeathBlock";
     public static final String BETTER_FURNACE = "BetterFurnaceBlock";
     public static final String IMPROVED_WORKTABLE = "ImprovedWorktableBlock";
+    public static final String IMPROVED_HOPPER = "ImprovedHopperBlock";
 
     public static final String FURNACE_UPGRADE = "FurnaceUpgradeItem";
 }

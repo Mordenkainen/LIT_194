@@ -26,6 +26,8 @@ tile.BetterFurnaceBlock_lapis.name=Lapis Furnace
 
 tile.ImprovedWorktableBlock.name=Improved Worktable
 
+tile.ImprovedHopperBlock.name=Improved Hopper
+
 #-------------------------------------------------------------------
 # Items
 #-------------------------------------------------------------------

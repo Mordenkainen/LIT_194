@@ -36,5 +36,7 @@ public class ItemRenderRegister {
         }
 
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.improvedWorktableBlock),0,new ModelResourceLocation(LIT.MODID+":"+Names.IMPROVED_WORKTABLE,"inventory"));
+
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.improvedHopperBlock),0,new ModelResourceLocation(LIT.MODID+":"+Names.IMPROVED_HOPPER, "connections=down"));
     }
 }

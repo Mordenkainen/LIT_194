@@ -19,6 +19,8 @@ public class ModBlocks {
 
     public static ImprovedWorktableBlock improvedWorktableBlock = new ImprovedWorktableBlock();
 
+    public static ImprovedHopperBlock improvedHopperBlock = new ImprovedHopperBlock();
+
     public static void createBlocks()
     {
         GameRegistry.register(improvedFurnaceBlock);
@@ -40,6 +42,9 @@ public class ModBlocks {
 
         GameRegistry.register(improvedWorktableBlock);
         GameRegistry.register(new ItemBlock(improvedWorktableBlock).setRegistryName(LIT.MODID,Names.IMPROVED_WORKTABLE));
+
+        GameRegistry.register(improvedHopperBlock);
+        GameRegistry.register(new ItemBlock(improvedHopperBlock).setRegistryName(LIT.MODID, Names.IMPROVED_HOPPER));
 
     }
 }

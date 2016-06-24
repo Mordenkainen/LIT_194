@@ -43,6 +43,6 @@ public class ModRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(com.m4thg33k.lit.items.ModItems.itemFurnaceUpgrade,2,1),"grg","rcr","glg",'c',"gemDiamond",'g',"ingotGold",'r',new ItemStack(Items.BLAZE_ROD,1),'l',"blockLapis"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(com.m4thg33k.lit.items.ModItems.itemFurnaceUpgrade,2,2),"grg","rcr","glg",'c',"gemDiamond",'g',"ingotGold",'r',new ItemStack(com.m4thg33k.lit.blocks.ModBlocks.improvedFurnaceBlock,1),'l',"blockLapis"));
 
-
+        GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.improvedHopperBlock,1,0),new ItemStack(Blocks.HOPPER,1));
     }
 }
