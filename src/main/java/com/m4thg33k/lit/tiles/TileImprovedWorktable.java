@@ -289,7 +289,7 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
             tagCompound.setTag("Result", resultTag);
         }
 
-        LogHelper.info("Sending Worktable Update Packet");
+//        LogHelper.info("Sending Worktable Update Packet");
         return new SPacketUpdateTileEntity(pos, 0, tagCompound);
     }
 

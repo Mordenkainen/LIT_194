@@ -357,7 +357,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
             case 1:
                 return currentItemBurnTime;
             case 2:
-                LogHelper.info("Cook time: " + cookTime);
+//                LogHelper.info("Cook time: " + cookTime);
                 return cookTime;
             case 3:
                 return totalCookTime;

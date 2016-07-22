@@ -60,7 +60,7 @@ public class ImprovedWorktableBlock extends BaseBlock {
                         n++;
                     }
                 }
-                LogHelper.info("Tile has " + n + " non-empty slots");
+//                LogHelper.info("Tile has " + n + " non-empty slots");
                 return true;
             }
             playerIn.openGui(LIT.instance, LitGuiHandler.IMPROVED_WORKTABLE,worldIn,pos.getX(),pos.getY(),pos.getZ());

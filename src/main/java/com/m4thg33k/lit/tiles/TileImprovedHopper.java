@@ -170,7 +170,7 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
 
             if (!this.isOnTransferCooldown())
             {
-                LogHelper.info(transferCooldown);
+//                LogHelper.info(transferCooldown);
                 this.setTransferCooldown(0);
                 this.updateHopper();
             }
