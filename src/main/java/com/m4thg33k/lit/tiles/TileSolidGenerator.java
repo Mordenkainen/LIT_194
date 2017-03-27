@@ -57,7 +57,7 @@ public class TileSolidGenerator extends TileEntity implements IEnergyProvider,IT
             int slot = stackTag.getByte("Slot")&0xff;
             if (slot>=0 && slot<inventory.length)
             {
-                inventory[slot] = ItemStack.loadItemStackFromNBT(stackTag);
+                inventory[slot] = ItemStack.func_77949_a(stackTag);
             }
         }
 
@@ -136,7 +136,7 @@ public class TileSolidGenerator extends TileEntity implements IEnergyProvider,IT
         int total = 0;
         for (EnumFacing facing : EnumFacing.values())
         {
-            TileEntity tileEntity = worldObj.getTileEntity(pos.add(facing.getDirectionVec()));
+            TileEntity tileEntity = world.getTileEntity(pos.add(facing.getDirectionVec()));
             if (tileEntity!=null && (tileEntity instanceof IEnergyReceiver))
             {
                 IEnergyReceiver te = (IEnergyReceiver)tileEntity;
@@ -196,7 +196,7 @@ public class TileSolidGenerator extends TileEntity implements IEnergyProvider,IT
             burnTime-=2;
         }
 
-        if (!worldObj.isRemote)
+        if (!world.isRemote)
         {
             if (!isBurning())
             {
@@ -231,8 +231,8 @@ public class TileSolidGenerator extends TileEntity implements IEnergyProvider,IT
         {
             NBTTagCompound tag = new NBTTagCompound();
             writeToNBT(tag);
-            LITNetwork.sendToAllAround(new PacketNBT(pos,tag), new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), pos.getX(),pos.getY(),pos.getZ(),32));
-//            LITPackets.INSTANCE.sendToAllAround(new PacketNBT(pos,tag),new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(),pos.getX(),pos.getY(),pos.getZ(),32));
+            LITNetwork.sendToAllAround(new PacketNBT(pos,tag), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(),pos.getY(),pos.getZ(),32));
+//            LITPackets.INSTANCE.sendToAllAround(new PacketNBT(pos,tag),new NetworkRegistry.TargetPoint(world.provider.getDimension(),pos.getX(),pos.getY(),pos.getZ(),32));
 //            LogHelper.info("Sending update");
         }
     }
@@ -340,8 +340,8 @@ public class TileSolidGenerator extends TileEntity implements IEnergyProvider,IT
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(pos)==this && player.getDistanceSq(pos.add(0.5,0.5,0.5))<=64;
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return world.getTileEntity(pos)==this && player.getDistanceSq(pos.add(0.5,0.5,0.5))<=64;
     }
 
     @Override

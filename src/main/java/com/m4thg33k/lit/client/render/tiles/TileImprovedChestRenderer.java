@@ -28,7 +28,7 @@ public class TileImprovedChestRenderer extends TileEntitySpecialRenderer{
         int facing = 3;
         ChestTypes type = tile.getType();
 
-        if (tile.hasWorldObj() && tile.getWorld().getBlockState(tile.getPos()).getBlock() instanceof ImprovedChestBlock)
+        if (tile.hasWorld() && tile.getWorld().getBlockState(tile.getPos()).getBlock() instanceof ImprovedChestBlock)
         {
             facing = tile.getFacing().ordinal();
             type = tile.getType();

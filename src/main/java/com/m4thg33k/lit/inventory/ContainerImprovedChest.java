@@ -25,7 +25,7 @@ public class ContainerImprovedChest extends Container{
 
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
-        return chest.isUseableByPlayer(playerIn);
+        return chest.isUsableByPlayer(playerIn);
     }
 
     @Override

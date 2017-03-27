@@ -33,8 +33,8 @@ public class GuiImprovedFurnace extends GuiContainer {
         int h = (height-ySize)/2;
 
         String name = tileImprovedFurnace.getDisplayName().getUnformattedText();
-        this.fontRendererObj.drawString(name,xSize/2-this.fontRendererObj.getStringWidth(name)/2,6,0x404040);
-        this.fontRendererObj.drawString(this.playerInventory.getDisplayName().getUnformattedText(),8,ySize-96+2,0x404040);
+        this.fontRenderer.drawString(name,xSize/2-this.fontRenderer.getStringWidth(name)/2,6,0x404040);
+        this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(),8,ySize-96+2,0x404040);
 
         int mX = mouseX - w;
         int mY = mouseY - h;
@@ -48,7 +48,7 @@ public class GuiImprovedFurnace extends GuiContainer {
         int stored = ((ContainerImprovedFurnace)this.inventorySlots).storedFuel;
         int max = ((ContainerImprovedFurnace)this.inventorySlots).maxFuel;
 
-//        this.fontRendererObj.drawString(stored + "," + max,mX+10,mY+10,0x404040);
+//        this.fontRenderer.drawString(stored + "," + max,mX+10,mY+10,0x404040);
         double perc = Math.floor(((double)stored/((double)max))*10000)/100;
 
         String smelt = "Able to smelt %d items.";
@@ -61,15 +61,15 @@ public class GuiImprovedFurnace extends GuiContainer {
 
         this.drawHoveringText(text,mX,mY);
 
-//        int textWidth = this.fontRendererObj.getStringWidth(smelt);
+//        int textWidth = this.fontRenderer.getStringWidth(smelt);
 
 //        mc.getTextureManager().bindTexture(new ResourceLocation(LIT.MODID+":textures/gui/"+ Names.IMPROVED_FURNACE + ".png"));
 //        this.drawTexturedModalRect(mX-textWidth-2,mY-12,0,180,textWidth+4,18);
 
-//        this.fontRendererObj.drawStringWithShadow(percent,mX-textWidth,mY-10,0x404040);
-//        this.fontRendererObj.drawString(percent,mX-textWidth,mY-10,0x404040);
-//        this.fontRendererObj.drawString(smelt,mX-textWidth,mY-2,0x404040);
-//        this.fontRendererObj.drawString("Able to smelt " + ((ContainerImprovedFurnace)this.inventorySlots).getNumSmeltable + " items.",mouseX-w,mouseY-h,0x404040);
+//        this.fontRenderer.drawStringWithShadow(percent,mX-textWidth,mY-10,0x404040);
+//        this.fontRenderer.drawString(percent,mX-textWidth,mY-10,0x404040);
+//        this.fontRenderer.drawString(smelt,mX-textWidth,mY-2,0x404040);
+//        this.fontRenderer.drawString("Able to smelt " + ((ContainerImprovedFurnace)this.inventorySlots).getNumSmeltable + " items.",mouseX-w,mouseY-h,0x404040);
     }
 
     @Override

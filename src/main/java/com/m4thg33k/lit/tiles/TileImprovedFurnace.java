@@ -120,7 +120,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
         {
             NBTTagCompound stackTag = list.getCompoundTagAt(i);
             int slot = stackTag.getByte("Slot")&255;
-            setInventorySlotContents(slot,ItemStack.loadItemStackFromNBT(stackTag));
+            setInventorySlotContents(slot,ItemStack.func_77949_a(stackTag));
         }
 
         if (compound.hasKey("CustomName"))
@@ -155,7 +155,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
         {
             NBTTagCompound stackTag = list2.getCompoundTagAt(i);
             int slot = stackTag.getInteger("Slot");
-            this.upgrades[slot] = ItemStack.loadItemStackFromNBT(stackTag);
+            this.upgrades[slot] = ItemStack.func_77949_a(stackTag);
         }
     }
 
@@ -321,8 +321,8 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(pos)==this && player.getDistanceSq(pos.add(0.5,0.5,0.5))<=64;
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return world.getTileEntity(pos)==this && player.getDistanceSq(pos.add(0.5,0.5,0.5))<=64;
     }
 
     @Override
@@ -453,7 +453,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
         }
 
 
-        if (!worldObj.isRemote) {
+        if (!world.isRemote) {
             storeFuel();
 
             if (isBurning() || inventory[1] != null && hasEnoughFuel()) {
@@ -478,7 +478,8 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
                     cookTime = 0;
                 }
             } else if (!isBurning() && cookTime > 0) {
-                cookTime = MathHelper.clamp_int(cookTime - 2, 0, totalCookTime);
+                cookTime = MathHelper.clamp(cookTime - 2, 0, totalCookTime);
+//                cookTime = MathHelper.clamp_int(cookTime - 2, 0, totalCookTime);
             }
 
             if (on != isBurning()) {
@@ -495,8 +496,8 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
         {
             NBTTagCompound tag = new NBTTagCompound();
             writeToNBT(tag);
-            LITNetwork.sendToAllAround(new PacketNBT(pos,tag), new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), pos.getX(),pos.getY(),pos.getZ(),32));
-//            LITPackets.INSTANCE.sendToAllAround(new PacketNBT(pos, tag), new NetworkRegistry.TargetPoint(worldObj.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32));
+            LITNetwork.sendToAllAround(new PacketNBT(pos,tag), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(),pos.getY(),pos.getZ(),32));
+//            LITPackets.INSTANCE.sendToAllAround(new PacketNBT(pos, tag), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32));
 //            LogHelper.info("Sending furnace packet");
         }
     }
@@ -613,7 +614,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
     {
         if (cookTimeFactor<=0.01 && stack.getItemDamage()==0)
         {
-            ChatHelper.sayMessage(player.worldObj,player,"Adding that won't do anything...");
+            ChatHelper.sayMessage(player.world,player,"Adding that won't do anything...");
             return;
         }
         upgrades[numUpgradesInstalled] = stack.copy();
@@ -636,7 +637,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
                 break;
             default:
         }
-        ChatHelper.sayMessage(player.worldObj,player,"Upgrade Installed!");
+        ChatHelper.sayMessage(player.world,player,"Upgrade Installed!");
     }
 
     public int getUpgradeCount()
@@ -673,7 +674,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
             item.motionY = world.rand.nextGaussian() * (double)f3 + 0.2;
             item.motionZ = world.rand.nextGaussian() * (double)f3;
 
-            world.spawnEntityInWorld(item);
+            world.spawnEntity(item);
         }
     }
 

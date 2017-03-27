@@ -50,7 +50,7 @@ public class ContainerImprovedFurnace extends Container{
 
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
-        return te.isUseableByPlayer(playerIn);
+        return te.isUsableByPlayer(playerIn);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class ContainerImprovedFurnace extends Container{
             {
                 return null;
             }
-            slot.onPickupFromSlot(playerIn,current);
+            slot.func_82870_a(playerIn,current);
         }
         return previous;
     }

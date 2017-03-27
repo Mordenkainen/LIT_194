@@ -14,7 +14,7 @@ public class PacketLITCraftingUpdate extends BaseThreadsafePacket {
 
     @Override
     public void handleServerSafe(NetHandlerPlayServer netHandler) {
-        Container container = netHandler.playerEntity.openContainer;
+        Container container = netHandler.player.openContainer;
         if (container != null)
         {
             container.onCraftMatrixChanged(null);

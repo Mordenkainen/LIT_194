@@ -43,10 +43,10 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void handleNBTPacket(PacketNBT pkt) {
-        World world = Minecraft.getMinecraft().theWorld;
+        World world = Minecraft.getMinecraft().world;
         try {
-            Minecraft.getMinecraft().theWorld.getTileEntity(pkt.pos).readFromNBT(pkt.compound);
-            Minecraft.getMinecraft().theWorld.notifyBlockUpdate(pkt.pos, world.getBlockState(pkt.pos), world.getBlockState(pkt.pos), 0);
+            Minecraft.getMinecraft().world.getTileEntity(pkt.pos).readFromNBT(pkt.compound);
+            Minecraft.getMinecraft().world.notifyBlockUpdate(pkt.pos, world.getBlockState(pkt.pos), world.getBlockState(pkt.pos), 0);
         } catch (NullPointerException e)
         {
             LogHelper.error("Null pointer issue with tile packet!");

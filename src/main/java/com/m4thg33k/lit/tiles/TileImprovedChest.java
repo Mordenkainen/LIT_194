@@ -158,7 +158,7 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
             int slot = stackTag.getByte("Slot") & 0xff;
             if (slot >= 0 && slot<inventory.length)
             {
-                inventory[slot] = ItemStack.loadItemStackFromNBT(stackTag);
+                inventory[slot] = ItemStack.func_77949_a(stackTag);
             }
         }
         facing = EnumFacing.values()[compound.getInteger("Facing")];
@@ -200,12 +200,12 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        if (worldObj==null)
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        if (world==null)
         {
             return true;
         }
-        if (worldObj.getTileEntity(pos) != this)
+        if (world.getTileEntity(pos) != this)
         {
             return false;
         }
@@ -234,10 +234,10 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
     @Override
     public void update() {
         //resync clients with the server state
-        if (worldObj!=null && !this.worldObj.isRemote && this.numUsingPlayers!=0 && (this.ticksSinceSync + pos.getX() + pos.getY() + pos.getZ())%200==0) {
+        if (world!=null && !this.world.isRemote && this.numUsingPlayers!=0 && (this.ticksSinceSync + pos.getX() + pos.getY() + pos.getZ())%200==0) {
             this.numUsingPlayers = 0;
             float var1 = 5.0f;
-            List<EntityPlayer> var2 = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() - var1, pos.getY() - var1, pos.getZ() - var1, pos.getX() + 1 + var1, pos.getY() + 1 + var1, pos.getZ() + 1 + var1));
+            List<EntityPlayer> var2 = this.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() - var1, pos.getY() - var1, pos.getZ() - var1, pos.getX() + 1 + var1, pos.getY() + 1 + var1, pos.getZ() + 1 + var1));
 
             for (EntityPlayer var4 : var2) {
                 if (var4.openContainer instanceof ContainerImprovedChest) {
@@ -246,11 +246,11 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
             }
         }
 
-        if (worldObj != null && !worldObj.isRemote && ticksSinceSync<0)
+        if (world != null && !world.isRemote && ticksSinceSync<0)
         {
-            worldObj.addBlockEvent(pos, ModBlocks.improvedChestBlock,3,((numUsingPlayers << 3) & 0xF8 | ((byte)facing.ordinal() & 0x7)));
+            world.addBlockEvent(pos, ModBlocks.improvedChestBlock,3,((numUsingPlayers << 3) & 0xF8 | ((byte)facing.ordinal() & 0x7)));
         }
-        if (!worldObj.isRemote && inventoryTouched)
+        if (!world.isRemote && inventoryTouched)
         {
             inventoryTouched = false;
         }
@@ -263,8 +263,8 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
             double d = pos.getX() + 0.5;
             double d1 = pos.getZ() + 0.5;
 
-            worldObj.playSound((EntityPlayer)null,d,pos.getY()+0.5,d1, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS,0.5f,worldObj.rand.nextFloat()*0.1f+0.9f);
-//            worldObj.playAuxSFX(d,pos.getY()+0.5,d1,"random.chestopen",0.5f,worldObj.rand.nextFloat()*0.1f+0.9f);
+            world.playSound((EntityPlayer)null,d,pos.getY()+0.5,d1, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS,0.5f,world.rand.nextFloat()*0.1f+0.9f);
+//            world.playAuxSFX(d,pos.getY()+0.5,d1,"random.chestopen",0.5f,world.rand.nextFloat()*0.1f+0.9f);
         }
         if (numUsingPlayers == 0 && lidAngle > 0.0f || numUsingPlayers > 0 && lidAngle < 1.0f)
         {
@@ -286,8 +286,8 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
             {
                 double d2 = pos.getX() + 0.5;
                 double d3 = pos.getZ() + 0.5;
-                worldObj.playSound((EntityPlayer)null,d2,pos.getY()+0.5,d3, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS,0.5f,worldObj.rand.nextFloat()*0.1f+0.9f);
-//                worldObj.playSoundEffect(d2,pos.getY()+0.5,d3,"random.chestclosed",0.5f, worldObj.rand.nextFloat()*0.1f+0.9f);
+                world.playSound((EntityPlayer)null,d2,pos.getY()+0.5,d3, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS,0.5f,world.rand.nextFloat()*0.1f+0.9f);
+//                world.playSoundEffect(d2,pos.getY()+0.5,d3,"random.chestclosed",0.5f, world.rand.nextFloat()*0.1f+0.9f);
             }
             if (lidAngle<0.0f)
             {
@@ -299,22 +299,22 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
 
     @Override
     public void openInventory(EntityPlayer player) {
-        if (worldObj == null)
+        if (world == null)
         {
             return;
         }
         numUsingPlayers++;
-        worldObj.addBlockEvent(pos,ModBlocks.improvedChestBlock,1,numUsingPlayers);
+        world.addBlockEvent(pos,ModBlocks.improvedChestBlock,1,numUsingPlayers);
     }
 
     @Override
     public void closeInventory(EntityPlayer player) {
-        if (worldObj == null)
+        if (world == null)
         {
             return;
         }
         numUsingPlayers--;
-        worldObj.addBlockEvent(pos, ModBlocks.improvedChestBlock,1,numUsingPlayers);
+        world.addBlockEvent(pos, ModBlocks.improvedChestBlock,1,numUsingPlayers);
     }
 
     public void setFacing(EnumFacing facing)
@@ -384,7 +384,7 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
 //            facing = (byte)EnumFacing.NORTH.ordinal();
 //        }
 //        setFacing(facing);
-        worldObj.addBlockEvent(pos,ModBlocks.improvedChestBlock,2,(byte)facing.ordinal());
+        world.addBlockEvent(pos,ModBlocks.improvedChestBlock,2,(byte)facing.ordinal());
     }
 
     public void wasPlaced(EntityLivingBase entityLivingBase, ItemStack itemStack)
@@ -439,7 +439,7 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
             int slot = stackTag.getByte("Slot") & 0xff;
             if (slot >= 0 && slot<inventory.length)
             {
-                inventory[slot] = ItemStack.loadItemStackFromNBT(stackTag);
+                inventory[slot] = ItemStack.func_77949_a(stackTag);
             }
         }
     }
@@ -482,7 +482,7 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
         }
         this.setContents(sorted);
         markDirty();
-        worldObj.markAndNotifyBlock(pos,null,worldObj.getBlockState(pos), worldObj.getBlockState(pos),1);
+        world.markAndNotifyBlock(pos,null,world.getBlockState(pos), world.getBlockState(pos),1);
 
     }
 

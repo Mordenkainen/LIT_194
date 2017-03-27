@@ -120,12 +120,10 @@ public class ContainerImprovedCraftingTable extends Container {
                 slot.onSlotChanged();
             }
 
-            if (itemStack.stackSize == stack.stackSize)
-            {
+            if (itemStack.stackSize == stack.stackSize) {
                 return null;
             }
-
-            slot.onPickupFromSlot(playerIn,itemStack);
+            slot.func_82870_a(playerIn,itemStack);
         }
 
         return stack;

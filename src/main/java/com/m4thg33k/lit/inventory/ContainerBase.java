@@ -229,7 +229,7 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
                 return null;
             }
 
-            slot.onPickupFromSlot(playerIn,stackInSlot);
+            slot.func_82870_a(playerIn,stackInSlot);
         }
 
 //        if (slot != null && slot.getHasStack())

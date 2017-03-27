@@ -98,7 +98,7 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-//        LogHelper.info("Setting contents in " + index + " on " + (worldObj.isRemote ? "client " : "server ") + "side!");
+//        LogHelper.info("Setting contents in " + index + " on " + (world.isRemote ? "client " : "server ") + "side!");
         if (index<0 || index>=9)
         {
             return;
@@ -121,37 +121,34 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
         return 64;
     }
 
+
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        if (worldObj==null)
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        if (world == null)
         {
             return false;
         }
-        if (worldObj.getTileEntity(pos)!=this)
-        {
-            return false;
-        }
-        return player.getDistanceSq(pos.add(0.5,0.5,0.5))<=64;
+        return world.getTileEntity(pos) == this && player.getDistanceSq(pos.add(0.5, 0.5, 0.5)) <= 64;
     }
 
     @Override
     public void openInventory(EntityPlayer player) {
-        if (worldObj==null)
+        if (world==null)
         {
             return;
         }
         numUsingPlayers++;
-        worldObj.addBlockEvent(pos, ModBlocks.improvedCraftingTableBlock,1,numUsingPlayers);
+        world.addBlockEvent(pos, ModBlocks.improvedCraftingTableBlock,1,numUsingPlayers);
     }
 
     @Override
     public void closeInventory(EntityPlayer player) {
-        if (worldObj==null)
+        if (world==null)
         {
             return;
         }
         numUsingPlayers--;
-        worldObj.addBlockEvent(pos,ModBlocks.improvedCraftingTableBlock,1,numUsingPlayers);
+        world.addBlockEvent(pos,ModBlocks.improvedCraftingTableBlock,1,numUsingPlayers);
     }
 
     @Override
@@ -213,11 +210,11 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
         removeEmptyStacks();
 
         //resync clients with the server state
-        if (worldObj!=null && !this.worldObj.isRemote && this.numUsingPlayers!=0 && (this.ticksSinceSync+pos.getX()+pos.getY()+pos.getZ())%200==0)
+        if (world!=null && !this.world.isRemote && this.numUsingPlayers!=0 && (this.ticksSinceSync+pos.getX()+pos.getY()+pos.getZ())%200==0)
         {
             this.numUsingPlayers = 0;
             float var1 = 5.0f;
-            List<EntityPlayer> var2 = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX()-var1,pos.getY()-var1,pos.getZ()-var1,pos.getX()+1+var1,pos.getY()+1+var1,pos.getZ()+1+var1));
+            List<EntityPlayer> var2 = this.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX()-var1,pos.getY()-var1,pos.getZ()-var1,pos.getX()+1+var1,pos.getY()+1+var1,pos.getZ()+1+var1));
 
             for (EntityPlayer player : var2)
             {
@@ -228,12 +225,12 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
             }
         }
 
-        if (worldObj!=null && !worldObj.isRemote && ticksSinceSync<0)
+        if (world!=null && !world.isRemote && ticksSinceSync<0)
         {
-            worldObj.addBlockEvent(pos,ModBlocks.improvedCraftingTableBlock,1,numUsingPlayers);
+            world.addBlockEvent(pos,ModBlocks.improvedCraftingTableBlock,1,numUsingPlayers);
         }
 
-        if (worldObj!=null && !worldObj.isRemote && inventoryTouched)
+        if (world!=null && !world.isRemote && inventoryTouched)
         {
             inventoryTouched = false;
         }
@@ -244,7 +241,7 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
             crafting.setInventorySlotContents(i,craftingGrid[i]);
         }
 
-        setResult(CraftingManager.getInstance().findMatchingRecipe(crafting,worldObj));
+        setResult(CraftingManager.getInstance().findMatchingRecipe(crafting,world));
 
         this.ticksSinceSync++;
     }
@@ -272,7 +269,8 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
             int slot = stackTag.getByte("Slot")&0xff;
             if (slot>=0 && slot<craftingGrid.length)
             {
-                craftingGrid[slot] = ItemStack.loadItemStackFromNBT(stackTag);
+                craftingGrid[slot] = ItemStack.func_77949_a(stackTag);
+//                craftingGrid[slot] = ItemStack.loadItemStackFromNBT(stackTag);
             }
         }
     }
@@ -371,7 +369,8 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
 //            LogHelper.info("Writing data to slot: " + slot);
             if (slot>=0 && slot<getSizeInventory())
             {
-                craftingGrid[slot] = ItemStack.loadItemStackFromNBT(stackTag);
+                craftingGrid[slot] = ItemStack.func_77949_a(stackTag);
+//                craftingGrid[slot] = ItemStack.loadItemStackFromNBT(stackTag);
             }
         }
 
@@ -380,11 +379,11 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
 
     public void syncInventories()
     {
-        if (worldObj.isRemote)
+        if (world.isRemote)
         {
             return;
         }
-        this.worldObj.markAndNotifyBlock(pos,null,worldObj.getBlockState(pos),worldObj.getBlockState(pos),3);
+        this.world.markAndNotifyBlock(pos,null,world.getBlockState(pos),world.getBlockState(pos),3);
 //        LogHelper.info("Syncing!");
     }
 

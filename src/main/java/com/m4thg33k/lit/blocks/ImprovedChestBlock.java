@@ -127,7 +127,7 @@ public class ImprovedChestBlock extends BlockContainer implements IExtendable{
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         byte chestFacing = 0;
-        int facing = MathHelper.floor_double((placer.rotationYaw*4f)/360f + 0.5d)&3;
+        int facing = MathHelper.floor((placer.rotationYaw*4f)/360f + 0.5d)&3;
         switch (facing)
         {
             case 0:

@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class ModRecipes {
 
@@ -44,5 +45,10 @@ public class ModRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(com.m4thg33k.lit.items.ModItems.itemFurnaceUpgrade,2,2),"grg","rcr","glg",'c',"gemDiamond",'g',"ingotGold",'r',new ItemStack(com.m4thg33k.lit.blocks.ModBlocks.improvedFurnaceBlock,1),'l',"blockLapis"));
 
         GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.improvedHopperBlock,1,0),new ItemStack(Blocks.HOPPER,1));
+
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.CRAFTING_TABLE, 1), "workbench"));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.FURNACE, 1), "furnace"));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.HOPPER, 1), "hopper"));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.CHEST, 1), "chest"));
     }
 }

@@ -49,7 +49,7 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
 
             if (j >= 0 && j < this.inventory.length)
             {
-                this.inventory[j] = ItemStack.loadItemStackFromNBT(stackTag);
+                this.inventory[j] = ItemStack.func_77949_a(stackTag);
             }
         }
 
@@ -141,8 +141,8 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return this.worldObj.getTileEntity(this.pos) == this && player.getDistanceSq(this.getPos().add(0.5,0.5,0.5)) <= 64;
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return this.world.getTileEntity(this.pos) == this && player.getDistanceSq(this.getPos().add(0.5,0.5,0.5)) <= 64;
     }
 
     @Override
@@ -162,7 +162,7 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
 
     @Override
     public void update() {
-        if (this.worldObj != null && !this.worldObj.isRemote)
+        if (this.world != null && !this.world.isRemote)
         {
             --this.transferCooldown;
 
@@ -179,7 +179,7 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
 
     public boolean updateHopper()
     {
-        if (this.worldObj != null && !this.worldObj.isRemote)
+        if (this.world != null && !this.world.isRemote)
         {
             if (!this.isOnTransferCooldown())
             {
@@ -243,7 +243,7 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
             return false;
         }
 
-        EnumFacing sideIn = this.worldObj.getBlockState(this.pos).getValue(LitStateProps.CONNECTIONS).getOpposite();
+        EnumFacing sideIn = this.world.getBlockState(this.pos).getValue(LitStateProps.CONNECTIONS).getOpposite();
 
         if (this.isInventoryFull(iInventory, sideIn))
         {
@@ -385,9 +385,9 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
 
     protected IInventory getInventoryForHopperTransfer()
     {
-        EnumFacing enumFacing = this.worldObj.getBlockState(this.pos).getValue(LitStateProps.CONNECTIONS);
+        EnumFacing enumFacing = this.world.getBlockState(this.pos).getValue(LitStateProps.CONNECTIONS);
         BlockPos position = this.pos.add(enumFacing.getFrontOffsetX(), enumFacing.getFrontOffsetY(), enumFacing.getFrontOffsetZ());
-        return TileEntityHopper.getInventoryAtPosition(this.worldObj, position.getX(), position.getY(), position.getZ());
+        return TileEntityHopper.getInventoryAtPosition(this.world, position.getX(), position.getY(), position.getZ());
     }
 
     public boolean isOnTransferCooldown()

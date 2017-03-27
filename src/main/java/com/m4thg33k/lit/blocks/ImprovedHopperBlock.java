@@ -91,9 +91,14 @@ public class ImprovedHopperBlock extends BaseBlock {
     }
 
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(LitStateProps.CONNECTIONS, (facing == EnumFacing.DOWN ? EnumFacing.DOWN : facing.getOpposite()));
     }
+
+    //    @Override
+//    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+//        return this.getDefaultState().withProperty(LitStateProps.CONNECTIONS, (facing == EnumFacing.DOWN ? EnumFacing.DOWN : facing.getOpposite()));
+//    }
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {

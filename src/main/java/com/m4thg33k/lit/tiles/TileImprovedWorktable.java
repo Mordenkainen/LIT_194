@@ -117,8 +117,8 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj!=null && worldObj.getTileEntity(pos) == this && player.getDistanceSq(pos.add(0.5,0.5,0.5)) <= 64;
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return world!=null && world.getTileEntity(pos) == this && player.getDistanceSq(pos.add(0.5,0.5,0.5)) <= 64;
     }
 
     @Override
@@ -210,7 +210,7 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
             int slot = stackTag.getByte("Slot") & 0xff;
             if (isValidSlot(slot))
             {
-                inventory[slot] = ItemStack.loadItemStackFromNBT(stackTag);
+                inventory[slot] = ItemStack.func_77949_a(stackTag);
             }
         }
 
@@ -226,7 +226,7 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
 
         if (compound.hasKey("Result"))
         {
-            this.result = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("Result"));
+            this.result = ItemStack.func_77949_a(compound.getCompoundTag("Result"));
         }
     }
 
@@ -313,13 +313,13 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
             int slot = stackTag.getByte("Slot") & 0xff;
             if (isValidSlot(slot))
             {
-                inventory[slot] = ItemStack.loadItemStackFromNBT(stackTag);
+                inventory[slot] = ItemStack.func_77949_a(stackTag);
             }
         }
 
         if (pkt.getNbtCompound().hasKey("Result"))
         {
-            result = ItemStack.loadItemStackFromNBT(pkt.getNbtCompound().getCompoundTag("Result"));
+            result = ItemStack.func_77949_a(pkt.getNbtCompound().getCompoundTag("Result"));
         }
         else
         {

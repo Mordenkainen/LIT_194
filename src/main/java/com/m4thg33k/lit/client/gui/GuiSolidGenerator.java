@@ -34,8 +34,8 @@ public class GuiSolidGenerator extends GuiContainer {
         int h = (height-ySize)/2;
 
         String name = tileSolidGenerator.getDisplayName().getUnformattedText();
-        this.fontRendererObj.drawString(name,xSize/2-this.fontRendererObj.getStringWidth(name)/2,6,0x404040);
-        this.fontRendererObj.drawString(this.playerInventory.getDisplayName().getUnformattedText(),8,ySize-96+2,0x404040);
+        this.fontRenderer.drawString(name,xSize/2-this.fontRenderer.getStringWidth(name)/2,6,0x404040);
+        this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(),8,ySize-96+2,0x404040);
 
         GlStateManager.color(1.0f,1.0f,1.0f,1.0f);
 
@@ -45,7 +45,7 @@ public class GuiSolidGenerator extends GuiContainer {
 //        int stored = tileSolidGenerator.getEnergyStored(EnumFacing.DOWN);
 
 //        String energy = "" + stored + "/" + max + " RF";
-//        this.fontRendererObj.drawString(energy,0,0,0x404040);
+//        this.fontRenderer.drawString(energy,0,0,0x404040);
 
         int mX = mouseX-w;
         int mY = mouseY-h;
