@@ -2,7 +2,6 @@ package com.m4thg33k.lit.blocks;
 
 import com.m4thg33k.lit.LIT;
 import com.m4thg33k.lit.api.LitStateProps;
-import com.m4thg33k.lit.core.util.LogHelper;
 import com.m4thg33k.lit.gui.LitGuiHandler;
 import com.m4thg33k.lit.lib.Names;
 import com.m4thg33k.lit.tiles.TileSolidGenerator;
@@ -74,7 +73,7 @@ public class SolidGeneratorBlock extends BaseBlock {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote)
         {
             playerIn.openGui(LIT.instance, LitGuiHandler.SOLID_GENERATOR_GUI,worldIn,pos.getX(),pos.getY(),pos.getZ());

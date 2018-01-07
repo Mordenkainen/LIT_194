@@ -1,6 +1,5 @@
 package com.m4thg33k.lit.client.render.tiles;
 
-import com.m4thg33k.lit.tiles.TileImprovedCraftingTable;
 import com.m4thg33k.lit.tiles.TileImprovedWorktable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -11,11 +10,11 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.items.ItemHandlerHelper;
 
-public class TileImprovedWorktableRenderer extends TileEntitySpecialRenderer{
+public class TileImprovedWorktableRenderer extends TileEntitySpecialRenderer<TileImprovedWorktable> {
 
     private double factor = 0.1875f;
 
@@ -25,13 +24,12 @@ public class TileImprovedWorktableRenderer extends TileEntitySpecialRenderer{
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
-        if (te==null)
+    public void renderTileEntityAt(TileImprovedWorktable tile, double x, double y, double z, float partialTicks, int destroyStage) {
+        if (tile==null)
         {
             return;
         }
 
-        TileImprovedWorktable tile = (TileImprovedWorktable) te;
         EnumFacing facing = tile.getFacing();
 
 
@@ -66,7 +64,7 @@ public class TileImprovedWorktableRenderer extends TileEntitySpecialRenderer{
 
         GlStateManager.rotate(rotation,0,1,0);
 
-        World world = te.getWorld();
+        World world = tile.getWorld();
         for (int i=0;i<9;i++)
         {
             this.renderItem(world,tile.getStackInSlot(i),(i/3)-1,0,(i%3)-1,0.125);
@@ -83,12 +81,10 @@ public class TileImprovedWorktableRenderer extends TileEntitySpecialRenderer{
         RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
         if (stack!=null)
         {
-//            LogHelper.info("Rendering index: " + index);
-            ItemStack single = stack.copy();
-            single.stackSize = 1;// new ItemStack(stack.getItem(),1,stack.getItemDamage());
+            ItemStack single = ItemHandlerHelper.copyStackWithSize(stack, 1);
 
             EntityItem entityItem = new EntityItem(world,0.0d,0.0d,0.0d,single);
-            entityItem.getEntityItem().stackSize = 1;
+            entityItem.getEntityItem().setCount(1);
             entityItem.hoverStart = 0.0f;
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.5,1+0.0625+extraHeight,0.5);
@@ -117,7 +113,6 @@ public class TileImprovedWorktableRenderer extends TileEntitySpecialRenderer{
         RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
         if (stack!=null)
         {
-//            LogHelper.info("Rendering index: " + index);
             ItemStack single = stack.copy();
 
             EntityItem entityItem = new EntityItem(world,0.0d,0.0d,0.0d,single);

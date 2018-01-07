@@ -1,7 +1,6 @@
 package com.m4thg33k.lit.blocks;
 
 import com.m4thg33k.lit.LIT;
-import com.m4thg33k.lit.core.util.LogHelper;
 import com.m4thg33k.lit.gui.LitGuiHandler;
 import com.m4thg33k.lit.lib.Names;
 import com.m4thg33k.lit.tiles.TileImprovedCraftingTable;
@@ -38,25 +37,10 @@ public class ImprovedCraftingTableBlock extends BaseBlock{
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote)
         {
-            if (playerIn.isSneaking())
-            {
-                TileImprovedCraftingTable tile = (TileImprovedCraftingTable)worldIn.getTileEntity(pos);
-                int n=0;
-                for (int i=0;i<9;i++)
-                {
-                    if (tile.getStackInSlot(i)!=null)
-                    {
-                        n++;
-                    }
-                }
-//                LogHelper.info("Tile has " + n + " non-empty slots");
-                return true;
-            }
             playerIn.openGui(LIT.instance, LitGuiHandler.IMPROVED_WORKTABLE,worldIn,pos.getX(),pos.getY(),pos.getZ());
-//            playerIn.openGui(LIT.instance, LitGuiHandler.IMPROVED_CRAFTING_TABLE,worldIn,pos.getX(),pos.getY(),pos.getZ());
         }
 
         return true;
@@ -70,7 +54,6 @@ public class ImprovedCraftingTableBlock extends BaseBlock{
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileImprovedWorktable();
-        //return new TileImprovedCraftingTable();
     }
 
     @Override
@@ -110,7 +93,5 @@ public class ImprovedCraftingTableBlock extends BaseBlock{
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         TileImprovedWorktable tile = (TileImprovedWorktable)worldIn.getTileEntity(pos);
         tile.setFacing(placer.getHorizontalFacing().getOpposite());
-//        TileImprovedCraftingTable tile = (TileImprovedCraftingTable)worldIn.getTileEntity(pos);
-//        tile.setFacing(placer.getHorizontalFacing().getOpposite());
     }
 }

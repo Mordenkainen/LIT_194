@@ -2,7 +2,6 @@ package com.m4thg33k.lit.blocks;
 
 import com.m4thg33k.lit.LIT;
 import com.m4thg33k.lit.api.LitStateProps;
-import com.m4thg33k.lit.core.util.LogHelper;
 import com.m4thg33k.lit.lib.Names;
 import com.m4thg33k.lit.tiles.TileImprovedHopper;
 import net.minecraft.block.material.Material;
@@ -10,12 +9,8 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -55,18 +50,12 @@ public class ImprovedHopperBlock extends BaseBlock {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
-    }
-
-    @Override
     public boolean hasTileEntity(IBlockState state) {
         return true;
     }
 
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-//        LogHelper.info("Creating new hopper");
         return new TileImprovedHopper();
     }
 
@@ -95,35 +84,6 @@ public class ImprovedHopperBlock extends BaseBlock {
         return this.getDefaultState().withProperty(LitStateProps.CONNECTIONS, (facing == EnumFacing.DOWN ? EnumFacing.DOWN : facing.getOpposite()));
     }
 
-    //    @Override
-//    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-//        return this.getDefaultState().withProperty(LitStateProps.CONNECTIONS, (facing == EnumFacing.DOWN ? EnumFacing.DOWN : facing.getOpposite()));
-//    }
-
-    @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-
-    }
-
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        super.breakBlock(worldIn, pos, state);
-    }
-
-    @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
-        super.harvestBlock(worldIn, player, pos, state, te, stack);
-    }
-
-    @Override
-    public boolean hasComparatorInputOverride(IBlockState state) {
-        return super.hasComparatorInputOverride(state);
-    }
-
-    @Override
-    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
-        return super.getComparatorInputOverride(blockState, worldIn, pos);
-    }
 
     private static final EnumFacing[] validRotationAxes = new EnumFacing[]{EnumFacing.UP, EnumFacing.DOWN};
 
@@ -133,26 +93,8 @@ public class ImprovedHopperBlock extends BaseBlock {
     }
 
     @Override
-    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
-        return super.rotateBlock(world, pos, axis);
-    }
-
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return super.getRenderType(state);
-    }
-
-    @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
-    }
-
-    @Override
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
-//        collidingBoxes.add(this.getBoundingBox(state,worldIn,pos));
-//        super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn);
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
         addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(0.0625,0.625,0.0625,0.9375,0.65625,0.9375));
-
         addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(0.0,0.625,0.0,0.9375,1.0,0.125));
         addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(0.125,0.625,0.875,1.0,1.0,1.0));
         addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(0.875,0.625,0.0,1.0,1.0,0.875));

@@ -14,12 +14,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.EnumSet;
-import java.util.List;
 
 public class BetterFurnaceBlock extends ImprovedFurnaceBlock{
 
@@ -45,7 +45,7 @@ public class BetterFurnaceBlock extends ImprovedFurnaceBlock{
     }
 
     @Override
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (int i=0;i<EnumBetterFurnaceType.values().length;i++)
         {
             list.add(new ItemStack(itemIn,1,i));

@@ -1,7 +1,5 @@
 package com.m4thg33k.lit.lib;
 
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-
 public class Constants {
 
     //Furnace Upgrades

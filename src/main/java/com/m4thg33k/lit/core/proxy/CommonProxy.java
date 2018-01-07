@@ -27,7 +27,6 @@ public class CommonProxy {
     {
         LITConfigs.preInit(e);
         LITNetwork.setup();
-//        LITPackets.init();
         ModItems.createItems();
         ModBlocks.createBlocks();
         ModItemBlocks.create();

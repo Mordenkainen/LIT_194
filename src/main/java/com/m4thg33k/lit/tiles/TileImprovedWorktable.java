@@ -1,6 +1,5 @@
 package com.m4thg33k.lit.tiles;
 
-import com.m4thg33k.lit.core.util.LogHelper;
 import com.m4thg33k.lit.lib.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -13,7 +12,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 
@@ -63,7 +61,7 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
     public ItemStack decrStackSize(int index, int count) {
         if (getStackInSlot(index) != null)
         {
-            if (inventory[index].stackSize <= count)
+            if (inventory[index].getCount() <= count)
             {
                 ItemStack itemStack = inventory[index];
                 inventory[index] = null;
@@ -71,7 +69,7 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
                 return itemStack;
             }
             ItemStack itemStack = inventory[index].splitStack(count);
-            if (inventory[index].stackSize == 0)
+            if (inventory[index].getCount() == 0)
             {
                 inventory[index] = null;
             }
@@ -98,13 +96,13 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
         {
             inventory[index] = stack;
 
-            if (stack != null && stack.stackSize==0)
+            if (stack != null && stack.getCount()==0)
             {
                 inventory[index] = null;
             }
-            if (stack != null && stack.stackSize > getInventoryStackLimit())
+            if (stack != null && stack.getCount() > getInventoryStackLimit())
             {
-                stack.stackSize = getInventoryStackLimit();
+                stack.setCount(getInventoryStackLimit());
             }
 
             markDirty();
@@ -210,7 +208,7 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
             int slot = stackTag.getByte("Slot") & 0xff;
             if (isValidSlot(slot))
             {
-                inventory[slot] = ItemStack.func_77949_a(stackTag);
+                inventory[slot] = new ItemStack(stackTag);
             }
         }
 
@@ -226,7 +224,7 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
 
         if (compound.hasKey("Result"))
         {
-            this.result = ItemStack.func_77949_a(compound.getCompoundTag("Result"));
+            this.result = new ItemStack(compound.getCompoundTag("Result"));
         }
     }
 
@@ -313,17 +311,27 @@ public class TileImprovedWorktable extends TileEntity implements IInventory{
             int slot = stackTag.getByte("Slot") & 0xff;
             if (isValidSlot(slot))
             {
-                inventory[slot] = ItemStack.func_77949_a(stackTag);
+                inventory[slot] = new ItemStack(stackTag);
             }
         }
 
         if (pkt.getNbtCompound().hasKey("Result"))
         {
-            result = ItemStack.func_77949_a(pkt.getNbtCompound().getCompoundTag("Result"));
+            result = new ItemStack(pkt.getNbtCompound().getCompoundTag("Result"));
         }
         else
         {
             result = null;
         }
+    }
+    
+    @Override
+    public boolean isEmpty() {
+        for (ItemStack stack : inventory) {
+            if (stack != null) {
+                return false;
+            }
+        }
+        return true;
     }
 }

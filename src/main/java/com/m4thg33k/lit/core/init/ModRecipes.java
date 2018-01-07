@@ -11,7 +11,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -41,8 +40,8 @@ public class ModRecipes {
         GameRegistry.addShapelessRecipe(new ItemStack(Items.COAL,9,1),new ItemStack(ModBlocks.charcoalBlock,1));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.itemFurnaceUpgrade,1,0),"grg","rcr","glg",'c',"gemDiamond",'g',"ingotGold",'r',"blockRedstone",'l',"blockLapis"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(com.m4thg33k.lit.items.ModItems.itemFurnaceUpgrade,2,1),"grg","rcr","glg",'c',"gemDiamond",'g',"ingotGold",'r',new ItemStack(Items.BLAZE_ROD,1),'l',"blockLapis"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(com.m4thg33k.lit.items.ModItems.itemFurnaceUpgrade,2,2),"grg","rcr","glg",'c',"gemDiamond",'g',"ingotGold",'r',new ItemStack(com.m4thg33k.lit.blocks.ModBlocks.improvedFurnaceBlock,1),'l',"blockLapis"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.itemFurnaceUpgrade,2,1),"grg","rcr","glg",'c',"gemDiamond",'g',"ingotGold",'r',new ItemStack(Items.BLAZE_ROD,1),'l',"blockLapis"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.itemFurnaceUpgrade,2,2),"grg","rcr","glg",'c',"gemDiamond",'g',"ingotGold",'r',new ItemStack(ModBlocks.improvedFurnaceBlock,1),'l',"blockLapis"));
 
         GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.improvedHopperBlock,1,0),new ItemStack(Blocks.HOPPER,1));
 

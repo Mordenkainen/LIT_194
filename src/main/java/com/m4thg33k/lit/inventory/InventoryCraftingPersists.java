@@ -1,7 +1,6 @@
 package com.m4thg33k.lit.inventory;
 
 import com.m4thg33k.lit.LIT;
-import com.m4thg33k.lit.network.LITNetwork;
 import com.m4thg33k.lit.network.packets.PacketLITCraftingUpdate;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -37,7 +36,7 @@ public class InventoryCraftingPersists extends InventoryCrafting{
     public ItemStack getStackInSlot(int index) {
         if (index < 0 || index >= length)
         {
-            return null;
+            return ItemStack.EMPTY;
         }
 
         return parentInventory.getStackInSlot(index);
@@ -52,14 +51,14 @@ public class InventoryCraftingPersists extends InventoryCrafting{
     @Override
     public ItemStack decrStackSize(int index, int count) {
         ItemStack parentStack = this.getStackInSlot(index);
-        if (parentStack != null)
+        if (!parentStack.isEmpty())
         {
             ItemStack stack;
 
-            if (parentStack.stackSize <= count)
+            if (parentStack.getCount() <= count)
             {
                 stack = parentStack;
-                this.setInventorySlotContents(index, null);
+                this.setInventorySlotContents(index, ItemStack.EMPTY);
                 this.eventHandler.onCraftMatrixChanged(this);
                 return stack;
             }
@@ -67,9 +66,9 @@ public class InventoryCraftingPersists extends InventoryCrafting{
             {
                 stack = this.getStackInSlot(index).splitStack(count);
 
-                if (this.getStackInSlot(index).stackSize <= 0)
+                if (this.getStackInSlot(index).getCount() <= 0)
                 {
-                    this.setInventorySlotContents(index, null);
+                    this.setInventorySlotContents(index, ItemStack.EMPTY);
                 }
 
                 this.eventHandler.onCraftMatrixChanged(this);
@@ -78,12 +77,12 @@ public class InventoryCraftingPersists extends InventoryCrafting{
         }
         else
         {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
-    public void setInventorySlotContents(int index, @Nullable ItemStack stack) {
+    public void setInventorySlotContents(int index, ItemStack stack) {
         this.parentInventory.setInventorySlotContents(index, stack);
         this.eventHandler.onCraftMatrixChanged(this);
     }

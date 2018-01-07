@@ -29,7 +29,7 @@ public class ChestRecipe extends ShapedOreRecipe {
         for (int i=0;i<var1.getSizeInventory();i++)
         {
             ItemStack stack = var1.getStackInSlot(i);
-            if (stack!=null && stack.hasTagCompound() && stack.getTagCompound().hasKey("Items"))
+            if (!stack.isEmpty() && stack.hasTagCompound() && stack.getTagCompound().hasKey("Items"))
             {
                 toReturn.setTagCompound(stack.getTagCompound());
             }

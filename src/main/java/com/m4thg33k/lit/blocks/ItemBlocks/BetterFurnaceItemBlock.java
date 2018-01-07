@@ -1,7 +1,6 @@
 package com.m4thg33k.lit.blocks.ItemBlocks;
 
 import com.m4thg33k.lit.LIT;
-import com.m4thg33k.lit.blocks.BetterFurnaceBlock;
 import com.m4thg33k.lit.lib.EnumBetterFurnaceType;
 import com.m4thg33k.lit.lib.Names;
 import net.minecraft.block.Block;

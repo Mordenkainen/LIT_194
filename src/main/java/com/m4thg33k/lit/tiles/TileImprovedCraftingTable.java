@@ -1,7 +1,6 @@
 package com.m4thg33k.lit.tiles;
 
 import com.m4thg33k.lit.blocks.ModBlocks;
-import com.m4thg33k.lit.core.util.LogHelper;
 import com.m4thg33k.lit.inventory.ContainerImprovedCraftingTable;
 import com.m4thg33k.lit.inventory.LITInventoryCrafting;
 import com.m4thg33k.lit.lib.IHasResult;
@@ -14,11 +13,11 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -28,7 +27,7 @@ import java.util.List;
 
 public class TileImprovedCraftingTable extends TileEntity implements ITickable,IInventory,ISidedInventory,IHasResult{
 
-    private ItemStack[] craftingGrid = new ItemStack[9];
+    private NonNullList<ItemStack> craftingGrid = NonNullList.<ItemStack>withSize(9, ItemStack.EMPTY);
 
     private ItemStack result;
 
@@ -54,46 +53,46 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
     public ItemStack getStackInSlot(int index) {
         if (index<0 || index>=9)
         {
-            return null;
+            return ItemStack.EMPTY;
         }
         inventoryTouched = true;
-        return craftingGrid[index];
+        return craftingGrid.get(index);
     }
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        if (getStackInSlot(index)!=null)
+        if (!getStackInSlot(index).isEmpty())
         {
-            if (craftingGrid[index].stackSize <= count)
+            if (craftingGrid.get(index).getCount() <= count)
             {
-                ItemStack itemStack = craftingGrid[index];
-                craftingGrid[index] = null;
+                ItemStack itemStack = craftingGrid.get(index);
+                craftingGrid.set(index, ItemStack.EMPTY);
                 markDirty();
                 return itemStack;
             }
-            ItemStack itemStack = craftingGrid[index].splitStack(count);
-            if (craftingGrid[index].stackSize==0)
+            ItemStack itemStack = craftingGrid.get(index).splitStack(count);
+            if (craftingGrid.get(index).getCount() ==0)
             {
-                craftingGrid[index] = null;
+                craftingGrid.set(index, ItemStack.EMPTY);
             }
             markDirty();
             return itemStack;
         }
         else
         {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        if (getStackInSlot(index)!=null)
+        if (!getStackInSlot(index).isEmpty())
         {
-            ItemStack stack = craftingGrid[index];
-            craftingGrid[index] = null;
+            ItemStack stack = craftingGrid.get(index);
+            craftingGrid.set(index, ItemStack.EMPTY);
             return stack;
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -103,14 +102,14 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
         {
             return;
         }
-        craftingGrid[index] = stack;
-        if (stack!=null && stack.stackSize<=0)
+        craftingGrid.set(index, stack);
+        if (!stack.isEmpty() && stack.getCount()<=0)
         {
-            craftingGrid[index] = null;
+            craftingGrid.set(index, ItemStack.EMPTY);
         }
-        if (stack!=null && stack.stackSize>getInventoryStackLimit())
+        if (!stack.isEmpty() && stack.getCount()>getInventoryStackLimit())
         {
-            stack.stackSize = getInventoryStackLimit();
+            stack.setCount(getInventoryStackLimit());
         }
         syncInventories();
         markDirty();
@@ -173,10 +172,7 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
 
     @Override
     public void clear() {
-        for (int i=0;i<this.craftingGrid.length;i++)
-        {
-            this.craftingGrid[i] = null;
-        }
+        this.craftingGrid = NonNullList.<ItemStack>withSize(9, ItemStack.EMPTY);
     }
 
     @Override
@@ -196,11 +192,11 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
 
     public void removeEmptyStacks()
     {
-        for (int i=0;i<craftingGrid.length;i++)
+        for (int i=0;i<craftingGrid.size();i++)
         {
-            if (craftingGrid[i]!=null && craftingGrid[i].stackSize<=0)
+            if (!craftingGrid.get(i).isEmpty() && craftingGrid.get(i).getCount()<=0)
             {
-                craftingGrid[i] = null;
+                craftingGrid.set(i, ItemStack.EMPTY);
             }
         }
     }
@@ -238,7 +234,7 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
         LITInventoryCrafting crafting = new LITInventoryCrafting(3,3);
         for (int i=0;i<9;i++)
         {
-            crafting.setInventorySlotContents(i,craftingGrid[i]);
+            crafting.setInventorySlotContents(i,craftingGrid.get(i));
         }
 
         setResult(CraftingManager.getInstance().findMatchingRecipe(crafting,world));
@@ -251,7 +247,7 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
         super.readFromNBT(compound);
 
         NBTTagList list = compound.getTagList("Items",10);
-        this.craftingGrid = new ItemStack[getSizeInventory()];
+        this.craftingGrid = NonNullList.<ItemStack>withSize(9, ItemStack.EMPTY);
 
         if (compound.hasKey("CustomName"))
         {
@@ -267,9 +263,9 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
         {
             NBTTagCompound stackTag = list.getCompoundTagAt(i);
             int slot = stackTag.getByte("Slot")&0xff;
-            if (slot>=0 && slot<craftingGrid.length)
+            if (slot>=0 && slot<craftingGrid.size())
             {
-                craftingGrid[slot] = ItemStack.func_77949_a(stackTag);
+                craftingGrid.set(slot, new ItemStack(stackTag));
 //                craftingGrid[slot] = ItemStack.loadItemStackFromNBT(stackTag);
             }
         }
@@ -279,13 +275,13 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         NBTTagList list = new NBTTagList();
-        for (int i=0;i<craftingGrid.length;i++)
+        for (int i=0;i<craftingGrid.size();i++)
         {
-            if (craftingGrid[i] != null)
+            if (!craftingGrid.get(i).isEmpty())
             {
                 NBTTagCompound stackTag = new NBTTagCompound();
                 stackTag.setByte("Slot",(byte)i);
-                craftingGrid[i].writeToNBT(stackTag);
+                craftingGrid.get(i).writeToNBT(stackTag);
                 list.appendTag(stackTag);
             }
         }
@@ -333,13 +329,13 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
     public NBTTagCompound getUpdateTag() {
         NBTTagCompound nbt = new NBTTagCompound();
         NBTTagList list = new NBTTagList();
-        for (int i=0;i<craftingGrid.length;i++)
+        for (int i=0;i<craftingGrid.size();i++)
         {
             if (getStackInSlot(i)!=null)
             {
                 NBTTagCompound stackTag = new NBTTagCompound();
                 stackTag.setByte("Slot",(byte)i);
-                craftingGrid[i].writeToNBT(stackTag);
+                craftingGrid.get(i).writeToNBT(stackTag);
                 list.appendTag(stackTag);
             }
         }
@@ -361,7 +357,7 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         NBTTagList list = pkt.getNbtCompound().getTagList("Items",10);
-        craftingGrid = new ItemStack[9];
+        craftingGrid = NonNullList.<ItemStack>withSize(9, ItemStack.EMPTY);
         for (int i=0;i<list.tagCount();i++)
         {
             NBTTagCompound stackTag = list.getCompoundTagAt(i);
@@ -369,7 +365,7 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
 //            LogHelper.info("Writing data to slot: " + slot);
             if (slot>=0 && slot<getSizeInventory())
             {
-                craftingGrid[slot] = ItemStack.func_77949_a(stackTag);
+                craftingGrid.set(slot, new ItemStack(stackTag));
 //                craftingGrid[slot] = ItemStack.loadItemStackFromNBT(stackTag);
             }
         }
@@ -413,5 +409,15 @@ public class TileImprovedCraftingTable extends TileEntity implements ITickable,I
     public EnumFacing getFacing()
     {
         return facing;
+    }
+    
+    @Override
+    public boolean isEmpty() {
+        for (ItemStack stack : craftingGrid) {
+            if (stack != null) {
+                return false;
+            }
+        }
+        return true;
     }
 }

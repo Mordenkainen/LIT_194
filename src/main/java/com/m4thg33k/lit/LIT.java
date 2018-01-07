@@ -1,12 +1,12 @@
 package com.m4thg33k.lit;
 
+import org.apache.logging.log4j.Logger;
+
 import com.m4thg33k.lit.blocks.ModBlocks;
 import com.m4thg33k.lit.core.proxy.CommonProxy;
-import com.m4thg33k.lit.core.util.LogHelper;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -22,6 +22,8 @@ public class LIT {
     public static final String MODNAME = "LIT";
 
     public static boolean isBaublesInstalled = false;
+    
+    public static Logger log;
 
     @Mod.Instance
     public static LIT instance = new LIT();
@@ -33,6 +35,7 @@ public class LIT {
     public void preInit(FMLPreInitializationEvent e)
     {
         proxy.preInit(e);
+        log = e.getModLog();
     }
 
     @Mod.EventHandler
@@ -50,8 +53,8 @@ public class LIT {
 
     public static CreativeTabs tabLIT = new CreativeTabs("tabLIT") {
         @Override
-        public Item getTabIconItem() {
-            return Item.getItemFromBlock(ModBlocks.improvedFurnaceBlock);
+        public ItemStack getTabIconItem() {
+            return new ItemStack(Item.getItemFromBlock(ModBlocks.improvedFurnaceBlock));
         }
     };
 

@@ -28,7 +28,8 @@ public class GuiImprovedCraftingTable extends GuiContainer{
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 
-        String name = "Improved Crafting Table";//tile.getDisplayName().getUnformattedText();
+        String name = "Improved Crafting Table";
+        //tile.getDisplayName().getUnformattedText();
         this.fontRenderer.drawString(name,xSize/2-this.fontRenderer.getStringWidth(name)/2,6,0x404040);
         this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(),8,ySize-96+2,0x404040);
     }

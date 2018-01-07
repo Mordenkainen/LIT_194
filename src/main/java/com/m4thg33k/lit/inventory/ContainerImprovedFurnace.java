@@ -21,7 +21,7 @@ public class ContainerImprovedFurnace extends Container{
     public int storedFuel;
     public int maxFuel;
     public int getNumSmeltable;
-    public ItemStack outputStack;
+    public ItemStack outputStack = ItemStack.EMPTY;
 
     public ContainerImprovedFurnace(InventoryPlayer playerInventory, TileImprovedFurnace tileGemFurnace)
     {
@@ -55,7 +55,7 @@ public class ContainerImprovedFurnace extends Container{
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-        ItemStack previous = null;
+        ItemStack previous = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(index);
 
         if (slot!=null && slot.getHasStack())
@@ -69,7 +69,7 @@ public class ContainerImprovedFurnace extends Container{
                 //from the te
                 if (!mergeItemStack(current,te.getSizeInventory(),te.getSizeInventory()+36,true))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
             else
@@ -82,46 +82,42 @@ public class ContainerImprovedFurnace extends Container{
                 {
                     if (!mergeItemStack(current,0,1,false))
                     {
-                        return null;
+                        return ItemStack.EMPTY;
                     }
                 }
                 else if (!canBurn && canSmelt) //if it can be smelted but not burned
                 {
                     if (!mergeItemStack(current,1,2,false))
                     {
-                        return null;
+                        return ItemStack.EMPTY;
                     }
                 }
                 else if (canBurn) //can burn and smelt, place first in input then burn
                 {
                     if (!mergeItemStack(current,0,2,true)){
-                        return null;
+                        return ItemStack.EMPTY;
                     }
                 }
                 else //can neither burn nor smelt (so don't move it
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
-//                if (!mergeItemStack(current,0,te.getSizeInventory(),false))
-//                {
-//                    return null;
-//                }
             }
 
-            if (current.stackSize == 0)
+            if (current.getCount() == 0)
             {
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             }
             else
             {
                 slot.onSlotChanged();
             }
 
-            if (current.stackSize == previous.stackSize)
+            if (current.getCount() == previous.getCount())
             {
-                return null;
+                return ItemStack.EMPTY;
             }
-            slot.func_82870_a(playerIn,current);
+            slot.onTake(playerIn,current);
         }
         return previous;
     }
@@ -187,33 +183,14 @@ public class ContainerImprovedFurnace extends Container{
         this.storedFuel = te.storedFuel;
         this.maxFuel = te.getMaxFuel();
         this.getNumSmeltable = te.getNumSmeltable();
-        if (te.getStackInSlot(2)==null)
+        if (te.getStackInSlot(2).isEmpty())
         {
-            this.outputStack = null;
+            this.outputStack = ItemStack.EMPTY;
         }
         else{
             this.outputStack = te.getStackInSlot(2).copy();
         }
     }
-
-
-
-//    @Override
-//    public void onCraftGuiOpened(IContainerListener iCrafting) {
-//        super.onCraftGuiOpened(iCrafting);
-//
-//        iCrafting.sendProgressBarUpdate(this,0,cookTime);
-//        iCrafting.sendProgressBarUpdate(this,1,totalItemCookTime);
-//        iCrafting.sendProgressBarUpdate(this,2,burnTime);
-//        iCrafting.sendProgressBarUpdate(this,3,totalBurnTime);
-//        //because they get truncated to shorts, we have to split this into two fields
-//        iCrafting.sendProgressBarUpdate(this,4,storedFuel/1000);
-//        iCrafting.sendProgressBarUpdate(this,5,storedFuel%1000);
-//        //because they get truncated to shorts, we have to split this into two fields
-//        iCrafting.sendProgressBarUpdate(this,6,maxFuel/1000);
-//        iCrafting.sendProgressBarUpdate(this,7,maxFuel%1000);
-//        iCrafting.sendProgressBarUpdate(this,8,getNumSmeltable);
-//    }
 
     @Override
     public void updateProgressBar(int id, int data) {
@@ -251,6 +228,5 @@ public class ContainerImprovedFurnace extends Container{
             default:
         }
     }
-
 
 }

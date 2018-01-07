@@ -1,7 +1,6 @@
 package com.m4thg33k.lit.tiles;
 
 import com.m4thg33k.lit.api.LitStateProps;
-import com.m4thg33k.lit.core.util.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -16,6 +15,7 @@ import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 //much of this code was adapted from the TileEntityHopper code.
 public class TileImprovedHopper extends TileEntityLockableLoot implements IHopper, ITickable{
 
-    protected ItemStack[] inventory = new ItemStack[9];
+    protected NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(9, ItemStack.EMPTY);
     protected String customName;
     protected int transferCooldown = -1;
 
@@ -32,7 +32,7 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
 
-        this.inventory = new ItemStack[this.getSizeInventory()];
+        this.inventory = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
 
         if (compound.hasKey("CustomName"))
         {
@@ -47,9 +47,9 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
             NBTTagCompound stackTag = tagList.getCompoundTagAt(i);
             int j = stackTag.getByte("Slot");
 
-            if (j >= 0 && j < this.inventory.length)
+            if (j >= 0 && j < this.inventory.size())
             {
-                this.inventory[j] = ItemStack.func_77949_a(stackTag);
+                this.inventory.set(j, new ItemStack(stackTag));
             }
         }
 
@@ -61,13 +61,13 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
 
         NBTTagList tagList = new NBTTagList();
 
-        for (int i=0; i < this.inventory.length; i++)
+        for (int i=0; i < this.inventory.size(); i++)
         {
-            if (this.inventory[i] != null)
+            if (!this.inventory.get(i).isEmpty())
             {
                 NBTTagCompound slotTag = new NBTTagCompound();
                 slotTag.setByte("Slot", (byte)i);
-                this.inventory[i].writeToNBT(slotTag);
+                this.inventory.get(i).writeToNBT(slotTag);
                 tagList.appendTag(slotTag);
             }
         }
@@ -87,13 +87,13 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
 
     @Override
     public int getSizeInventory() {
-        return this.inventory.length;
+        return this.inventory.size();
     }
 
     @Nullable
     @Override
     public ItemStack getStackInSlot(int index) {
-        return (index>=0 && index<this.getSizeInventory()) ? this.inventory[index] : null;
+        return (index>=0 && index<this.getSizeInventory()) ? this.inventory.get(index) : null;
     }
 
     @Nullable
@@ -112,10 +112,10 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
     public void setInventorySlotContents(int index, @Nullable ItemStack stack) {
         if (index >=0 && index < this.getSizeInventory())
         {
-            this.inventory[index] = stack;
-            if (stack != null && stack.stackSize > this.getInventoryStackLimit())
+            this.inventory.set(index, stack);
+            if (stack != null && stack.getCount()> this.getInventoryStackLimit())
             {
-                stack.stackSize = this.getInventoryStackLimit();
+                stack.setCount(this.getInventoryStackLimit());
             }
         }
     }
@@ -212,7 +212,7 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
     {
         for (ItemStack stack : this.inventory)
         {
-            if (stack == null || stack.stackSize != stack.getMaxStackSize())
+            if (stack == null || stack.getCount() != stack.getMaxStackSize())
             {
                 return false;
             }
@@ -221,7 +221,7 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
         return true;
     }
 
-    protected boolean isEmpty()
+    public boolean isEmpty()
     {
         for (ItemStack stack : this.inventory)
         {
@@ -255,9 +255,9 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
             if (this.getStackInSlot(i) != null)
             {
                 ItemStack myCopy = this.getStackInSlot(i).copy();
-                ItemStack altered = TileEntityHopper.putStackInInventoryAllSlots(iInventory, this.decrStackSize(i, 1), sideIn);
+                ItemStack altered = TileEntityHopper.putStackInInventoryAllSlots(this, iInventory, this.decrStackSize(i, 1), sideIn);
 
-                if (altered == null || altered.stackSize == 0)
+                if (altered == null || altered.getCount() == 0)
                 {
                     iInventory.markDirty();
                     return true;
@@ -280,7 +280,7 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
             for (int k : validSides)
             {
                 ItemStack inSlot = iSidedInventory.getStackInSlot(k);
-                if (inSlot == null || inSlot.stackSize != inSlot.getMaxStackSize())
+                if (inSlot == null || inSlot.getCount() != inSlot.getMaxStackSize())
                 {
                     return false;
                 }
@@ -294,7 +294,7 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
             {
                 ItemStack inSlot = inventoryIn.getStackInSlot(j);
 
-                if (inSlot == null || inSlot.stackSize != inSlot.getMaxStackSize())
+                if (inSlot == null || inSlot.getCount() != inSlot.getMaxStackSize())
                 {
                     return false;
                 }
@@ -315,7 +315,7 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
 
             if (itemStack == null) {
                 int max = Math.min(stack.getMaxStackSize(), receiever.getInventoryStackLimit());
-                if (max >= stack.stackSize) {
+                if (max >= stack.getCount()) {
                     receiever.setInventorySlotContents(index, stack);
                 } else {
                     receiever.setInventorySlotContents(index, stack.splitStack(max));
@@ -325,11 +325,11 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
             else if (canCombine(itemStack, stack))
             {
                 int max = Math.min(stack.getMaxStackSize(), receiever.getInventoryStackLimit());
-                if (max > itemStack.stackSize) {
-                    int i = max - itemStack.stackSize;
-                    int j = Math.min(stack.stackSize, i);
-                    stack.stackSize -= j;
-                    itemStack.stackSize += j;
+                if (max > itemStack.getCount()) {
+                    int i = max - itemStack.getCount();
+                    int j = Math.min(stack.getCount(), i);
+                    stack.shrink(j);
+                    itemStack.grow(j);
                     flag = j > 0;
                 }
             }
@@ -370,7 +370,7 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
 
     protected static boolean canCombine(ItemStack first, ItemStack second)
     {
-        return first.getItem() == second.getItem() && first.getMetadata() == second.getMetadata() && first.stackSize <= first.getMaxStackSize() && ItemStack.areItemStackTagsEqual(first, second);
+        return first.getItem() == second.getItem() && first.getMetadata() == second.getMetadata() && first.getCount() <= first.getMaxStackSize() && ItemStack.areItemStackTagsEqual(first, second);
     }
 
     public boolean mayTransfer()
@@ -437,9 +437,12 @@ public class TileImprovedHopper extends TileEntityLockableLoot implements IHoppe
 
     @Override
     public void clear() {
-        for (int i=0; i < this.inventory.length; i++)
-        {
-            this.inventory[i] = null;
-        }
+        inventory = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
+    }
+    
+    @Override
+    protected NonNullList<ItemStack> getItems()
+    {
+        return this.inventory;
     }
 }

@@ -14,14 +14,6 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-/*
-// for people who want stable - not yet functional for MC 1.8.8 - we require the forgegradle 2.1 snapshot
-plugins {
-    id "net.minecraftforge.gradle.forge" version "2.0.2"
-}
-*/
-
-
 //for JEI stuff
 repositories {
     maven {
@@ -31,7 +23,7 @@ repositories {
 //end for JEI stuff
 
 
-version = "1.10.2-3.0.4"
+version = "1.11.2-3.0.5"
 group= "com.m4thg33k.lit" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "LittleInsignificantThings"
 
@@ -40,7 +32,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 minecraft {
-    version = "1.10.2-12.18.3.2254"
+    version = "1.11.2-13.20.1.2563"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -81,7 +73,7 @@ dependencies {
 
 
     //for JEI stuff
-    deobfCompile "mezz.jei:jei_1.10.2:3.14.7.416"
+    deobfCompile "mezz.jei:jei_1.11.2:4.5.1.296"
     //end for JEI stuff
 
 }

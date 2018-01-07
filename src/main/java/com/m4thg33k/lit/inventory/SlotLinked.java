@@ -21,13 +21,12 @@ public class SlotLinked extends Slot{
     public void onSlotChanged() {
         super.onSlotChanged();
         ItemStack stack = this.getStack();
-        if (stack!=null && stack.stackSize>0) {
+        if (!stack.isEmpty() && stack.getCount()>0) {
             linkedInventory.setInventorySlotContents(linkedIndex, this.getStack());
         }
         else
         {
-            linkedInventory.setInventorySlotContents(linkedIndex,null);
-//            this.putStack(null);
+            linkedInventory.setInventorySlotContents(linkedIndex,ItemStack.EMPTY);
         }
     }
 

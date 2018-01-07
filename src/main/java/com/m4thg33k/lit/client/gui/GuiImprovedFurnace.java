@@ -98,7 +98,6 @@ public class GuiImprovedFurnace extends GuiContainer {
     {
         int i = ((ContainerImprovedFurnace)this.inventorySlots).storedFuel;
         int j = ((ContainerImprovedFurnace)this.inventorySlots).maxFuel;
-//        LogHelper.info("i,j: " + i + "," + j);
         return (j!=0 && i!=0) ? i*pixels/j : 0;
     }
 

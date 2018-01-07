@@ -20,6 +20,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -34,7 +35,7 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
 
     protected int numUsingPlayers;
     protected ChestTypes type;
-    public ItemStack[] inventory;
+    public NonNullList<ItemStack> inventory;
     protected EnumFacing facing;
     protected boolean inventoryTouched;
     protected String customName;
@@ -48,18 +49,18 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
     {
         super();
         this.type = type;
-        this.inventory = new ItemStack[getSizeInventory()];
+        this.inventory = NonNullList.<ItemStack>withSize(getSizeInventory(), ItemStack.EMPTY);
         this.facing = EnumFacing.NORTH;
     }
 
     public void setContents(ItemStack[] contents)
     {
-        inventory = new ItemStack[getSizeInventory()];
+        inventory = NonNullList.<ItemStack>withSize(getSizeInventory(), ItemStack.EMPTY);
         for (int i=0;i<contents.length;i++)
         {
-            if (i<inventory.length)
+            if (i<inventory.size() && contents[i] != null)
             {
-                inventory[i] = contents[i];
+                inventory.set(i, contents[i]);
             }
         }
         inventoryTouched = true;
@@ -83,24 +84,24 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
     @Override
     public ItemStack getStackInSlot(int index) {
         inventoryTouched = true;
-        return inventory[index];
+        return inventory.get(index);
     }
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        if (inventory[index] != null)
+        if (!inventory.get(index).isEmpty())
         {
-            if (inventory[index].stackSize <= count)
+            if (inventory.get(index).getCount() <= count)
             {
-                ItemStack itemStack = inventory[index];
-                inventory[index] = null;
+                ItemStack itemStack = inventory.get(index);
+                inventory.set(index, ItemStack.EMPTY);
                 markDirty();
                 return itemStack;
             }
-            ItemStack itemStack =inventory[index].splitStack(count);
-            if (inventory[index].stackSize==0)
+            ItemStack itemStack =inventory.get(index).splitStack(count);
+            if (inventory.get(index).getCount()==0)
             {
-                inventory[index] = null;
+                inventory.set(index, ItemStack.EMPTY);
             }
             markDirty();
             return itemStack;
@@ -113,10 +114,10 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        inventory[index] = stack;
-        if (stack != null && stack.stackSize > getInventoryStackLimit())
+        inventory.set(index, stack);
+        if (!stack.isEmpty() && stack.getCount() > getInventoryStackLimit())
         {
-            stack.stackSize = getInventoryStackLimit();
+            stack.setCount(getInventoryStackLimit());
         }
         markDirty();
     }
@@ -145,7 +146,7 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
         }
 
         NBTTagList list = compound.getTagList("Items",10);
-        this.inventory = new ItemStack[getSizeInventory()];
+        this.inventory = NonNullList.<ItemStack>withSize(getSizeInventory(), ItemStack.EMPTY);;
 
         if (compound.hasKey("CustomName"))
         {
@@ -156,9 +157,9 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
         {
             NBTTagCompound stackTag = list.getCompoundTagAt(i);
             int slot = stackTag.getByte("Slot") & 0xff;
-            if (slot >= 0 && slot<inventory.length)
+            if (slot >= 0 && slot<inventory.size())
             {
-                inventory[slot] = ItemStack.func_77949_a(stackTag);
+                inventory.set(slot, new ItemStack(stackTag));
             }
         }
         facing = EnumFacing.values()[compound.getInteger("Facing")];
@@ -170,13 +171,13 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         NBTTagList list = new NBTTagList();
-        for (int i=0;i<inventory.length;i++)
+        for (int i=0;i<inventory.size();i++)
         {
-            if (inventory[i]!=null)
+            if (!inventory.get(i).isEmpty())
             {
                 NBTTagCompound stackTag = new NBTTagCompound();
                 stackTag.setByte("Slot",(byte)i);
-                inventory[i].writeToNBT(stackTag);
+                inventory.get(i).writeToNBT(stackTag);
                 list.appendTag(stackTag);
             }
         }
@@ -361,10 +362,10 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        if (this.inventory[index]!=null)
+        if (!this.inventory.get(index).isEmpty())
         {
-            ItemStack stack = this.inventory[index];
-            this.inventory[index] = null;
+            ItemStack stack = this.inventory.get(index);
+            this.inventory.set(index, ItemStack.EMPTY);
             return stack;
         }
         return null;
@@ -409,9 +410,9 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
 
     @Override
     public void clear() {
-        for (int i=0;i<this.inventory.length;i++)
+        for (int i=0;i<this.inventory.size();i++)
         {
-            this.inventory[i] = null;
+            this.inventory.set(i, ItemStack.EMPTY);
         }
     }
 
@@ -437,9 +438,9 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
         {
             NBTTagCompound stackTag = list.getCompoundTagAt(i);
             int slot = stackTag.getByte("Slot") & 0xff;
-            if (slot >= 0 && slot<inventory.length)
+            if (slot >= 0 && slot<inventory.size())
             {
-                inventory[slot] = ItemStack.func_77949_a(stackTag);
+                inventory.set(slot, new ItemStack(stackTag));
             }
         }
     }
@@ -489,5 +490,15 @@ public class TileImprovedChest extends TileEntityLockable implements ITickable, 
     public void prepareSort(int sortType, boolean forward)
     {
         LIT.proxy.sendPacketToServerOnly(new PacketChestSorting(pos,sortType,forward));
+    }
+
+    @Override
+    public boolean isEmpty() {
+        for (ItemStack stack : inventory) {
+            if (stack != null) {
+                return false;
+            }
+        }
+        return true;
     }
 }

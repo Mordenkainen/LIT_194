@@ -3,7 +3,6 @@ package com.m4thg33k.lit.tiles;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
-import com.m4thg33k.lit.core.util.LogHelper;
 import com.m4thg33k.lit.lib.Names;
 import com.m4thg33k.lit.network.LITNetwork;
 import com.m4thg33k.lit.network.packets.PacketNBT;
@@ -13,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -57,7 +55,7 @@ public class TileSolidGenerator extends TileEntity implements IEnergyProvider,IT
             int slot = stackTag.getByte("Slot")&0xff;
             if (slot>=0 && slot<inventory.length)
             {
-                inventory[slot] = ItemStack.func_77949_a(stackTag);
+                inventory[slot] = new ItemStack(stackTag);
             }
         }
 
@@ -170,8 +168,8 @@ public class TileSolidGenerator extends TileEntity implements IEnergyProvider,IT
         {
             burnTime = getItemBurnTime(getStackInSlot(0));
             fullBurnTime = getItemBurnTime(getStackInSlot(0));
-            inventory[0].stackSize--;
-            if (inventory[0].stackSize==0)
+            inventory[0].shrink(1);
+            if (inventory[0].getCount()==0)
             {
                 if (inventory[0].getItem().hasContainerItem(inventory[0]))
                 {
@@ -284,7 +282,7 @@ public class TileSolidGenerator extends TileEntity implements IEnergyProvider,IT
         if (this.getStackInSlot(index)!=null)
         {
             ItemStack stack;
-            if (getStackInSlot(index).stackSize<=count)
+            if (getStackInSlot(index).getCount()<=count)
             {
                 stack = getStackInSlot(index);
                 setInventorySlotContents(index,null);
@@ -293,7 +291,7 @@ public class TileSolidGenerator extends TileEntity implements IEnergyProvider,IT
             }
             stack = this.getStackInSlot(index).splitStack(count);
 
-            if (getStackInSlot(index).stackSize<=0)
+            if (getStackInSlot(index).getCount()<=0)
             {
                 setInventorySlotContents(index,null);
             }
@@ -327,9 +325,9 @@ public class TileSolidGenerator extends TileEntity implements IEnergyProvider,IT
         boolean flag = stack!=null && stack.isItemEqual(inventory[0]) && ItemStack.areItemStackTagsEqual(stack,inventory[index]);
         inventory[index] = stack;
 
-        if (stack!=null && stack.stackSize>getInventoryStackLimit())
+        if (stack!=null && stack.getCount()>getInventoryStackLimit())
         {
-            stack.stackSize = getInventoryStackLimit();
+            stack.setCount(getInventoryStackLimit());
         }
 
     }
@@ -443,5 +441,15 @@ public class TileSolidGenerator extends TileEntity implements IEnergyProvider,IT
     public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound tag = this.getUpdateTag();
         return new SPacketUpdateTileEntity(pos,1,tag);
+    }
+    
+    @Override
+    public boolean isEmpty() {
+        for (ItemStack stack : inventory) {
+            if (stack != null) {
+                return false;
+            }
+        }
+        return true;
     }
 }

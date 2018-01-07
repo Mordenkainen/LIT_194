@@ -2,14 +2,12 @@ package com.m4thg33k.lit.client.render.tiles;
 
 import com.m4thg33k.lit.api.chest.ChestTypes;
 import com.m4thg33k.lit.blocks.ImprovedChestBlock;
-import com.m4thg33k.lit.blocks.ModBlocks;
 import com.m4thg33k.lit.tiles.TileImprovedChest;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 
-public class TileImprovedChestRenderer extends TileEntitySpecialRenderer{
+public class TileImprovedChestRenderer extends TileEntitySpecialRenderer<TileImprovedChest> {
 
     private ModelChest model;
 
@@ -84,7 +82,7 @@ public class TileImprovedChestRenderer extends TileEntitySpecialRenderer{
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
-        render((TileImprovedChest)te,x,y,z,partialTicks,destroyStage);
+    public void renderTileEntityAt(TileImprovedChest te, double x, double y, double z, float partialTicks, int destroyStage) {
+        render(te,x,y,z,partialTicks,destroyStage);
     }
 }

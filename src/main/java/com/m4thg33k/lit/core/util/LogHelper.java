@@ -1,14 +1,13 @@
 package com.m4thg33k.lit.core.util;
 
 import com.m4thg33k.lit.LIT;
-import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 
 public class LogHelper
 {
     public static void log(Level logLevel, Object object)
     {
-        FMLLog.log(LIT.MODNAME, logLevel, String.valueOf(object));
+        LIT.log.log(logLevel, String.valueOf(object));
     }
 
     public static void all(Object object)

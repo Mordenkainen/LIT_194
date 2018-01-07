@@ -1,13 +1,10 @@
 package com.m4thg33k.lit.blocks;
 
 import com.m4thg33k.lit.LIT;
-import com.m4thg33k.lit.core.util.LogHelper;
 import com.m4thg33k.lit.gui.LitGuiHandler;
 import com.m4thg33k.lit.lib.Names;
-import com.m4thg33k.lit.tiles.TileImprovedCraftingTable;
 import com.m4thg33k.lit.tiles.TileImprovedWorktable;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockStateBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +19,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class ImprovedWorktableBlock extends BaseBlock {
 
@@ -42,29 +38,10 @@ public class ImprovedWorktableBlock extends BaseBlock {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote)
         {
-            if (playerIn.isSneaking())
-            {
-                TileImprovedWorktable tile = (TileImprovedWorktable) worldIn.getTileEntity(pos);
-                if (tile == null)
-                {
-                    return false;
-                }
-                int n=0;
-                for (int i=0;i<9;i++)
-                {
-                    if (tile.getStackInSlot(i)!=null)
-                    {
-                        n++;
-                    }
-                }
-//                LogHelper.info("Tile has " + n + " non-empty slots");
-                return true;
-            }
             playerIn.openGui(LIT.instance, LitGuiHandler.IMPROVED_WORKTABLE,worldIn,pos.getX(),pos.getY(),pos.getZ());
-//            playerIn.openGui(LIT.instance, LitGuiHandler.IMPROVED_CRAFTING_TABLE,worldIn,pos.getX(),pos.getY(),pos.getZ());
         }
 
         return true;
@@ -118,7 +95,5 @@ public class ImprovedWorktableBlock extends BaseBlock {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         TileImprovedWorktable tile = (TileImprovedWorktable)worldIn.getTileEntity(pos);
         tile.setFacing(placer.getHorizontalFacing().getOpposite());
-//        TileImprovedCraftingTable tile = (TileImprovedCraftingTable)worldIn.getTileEntity(pos);
-//        tile.setFacing(placer.getHorizontalFacing().getOpposite());
     }
 }

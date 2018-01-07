@@ -3,11 +3,9 @@ package com.m4thg33k.lit.api.chest;
 import com.m4thg33k.lit.LIT;
 import com.m4thg33k.lit.core.crafting.ChestRecipe;
 import com.m4thg33k.lit.core.util.LogHelper;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.ArrayList;
 

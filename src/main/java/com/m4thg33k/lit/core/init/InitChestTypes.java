@@ -2,7 +2,6 @@ package com.m4thg33k.lit.core.init;
 
 import com.m4thg33k.lit.api.chest.ChestTypes;
 import com.m4thg33k.lit.blocks.ModBlocks;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

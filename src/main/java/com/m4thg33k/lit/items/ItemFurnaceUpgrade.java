@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -34,7 +35,7 @@ public class ItemFurnaceUpgrade extends Item {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity tile = worldIn.getTileEntity(pos);
 
         if (tile == null || !(tile instanceof TileImprovedFurnace))
@@ -46,11 +47,12 @@ public class ItemFurnaceUpgrade extends Item {
 
         if (te.canReceiveUpgrade())
         {
+            ItemStack stack = playerIn.getHeldItemMainhand();
             te.installUpgrade(playerIn,stack);
-            stack.stackSize--;
-            if (stack.stackSize==0)
+            stack.shrink(1);
+            if (stack.getCount()==0)
             {
-                stack = null;
+                stack = ItemStack.EMPTY;
             }
             return EnumActionResult.SUCCESS;
         }
@@ -67,7 +69,7 @@ public class ItemFurnaceUpgrade extends Item {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         for (int i=0;i<3;i++)
         {
             subItems.add(new ItemStack(itemIn,1,i));

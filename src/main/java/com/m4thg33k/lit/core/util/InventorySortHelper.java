@@ -208,7 +208,7 @@ public class InventorySortHelper {
             else
             {
                 ItemStack leftovers = mergeItemStack(thisStack, toReturn.get(index-1));
-                if (leftovers!=null && leftovers.stackSize != 0)
+                if (leftovers!=null && leftovers.getCount() != 0)
                 {
                     toReturn.add(leftovers);
                     index++;
@@ -228,21 +228,21 @@ public class InventorySortHelper {
     {
         if (target.isStackable() && areItemStacksEqual(source, target))
         {
-            int j = source.stackSize + target.stackSize;
+            int j = source.getCount() + target.getCount();
 
             if (j <= target.getMaxStackSize())
             {
-                source.stackSize = 0;
-                target.stackSize = j;
+                source.setCount(0);
+                target.setCount(j);
             }
-            else if (target.stackSize < source.getMaxStackSize())
+            else if (target.getCount() < source.getMaxStackSize())
             {
-                source.stackSize -= source.getMaxStackSize() - target.stackSize;
-                target.stackSize = source.getMaxStackSize();
+                source.setCount(source.getMaxStackSize() - target.getCount());
+                target.setCount(source.getMaxStackSize());
             }
         }
 
-        if (source.stackSize == 0)
+        if (source.getCount() == 0)
         {
             return null;
         }
@@ -252,7 +252,7 @@ public class InventorySortHelper {
 
     private static String getModName(ItemStack stack)
     {
-        if (stack == null)
+        if (stack == null || stack.isEmpty())
         {
             return "";
         }
@@ -265,7 +265,7 @@ public class InventorySortHelper {
         for (int i=0; i < inventory.getSizeInventory(); i++)
         {
             ItemStack inSlot = inventory.getStackInSlot(i);
-            if (inSlot != null)
+            if (inSlot != null && !inSlot.isEmpty())
             {
                 toReturn.add(inSlot.copy());
             }

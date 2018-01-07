@@ -30,7 +30,7 @@ public class ContainerImprovedChest extends Container{
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-        ItemStack itemStack = null;
+        ItemStack itemStack = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(index);
         if (slot!=null && slot.getHasStack())
         {
@@ -40,16 +40,16 @@ public class ContainerImprovedChest extends Container{
             {
                 if (!mergeItemStack(stack,type.getSize(),inventorySlots.size(),true))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
             else if (!mergeItemStack(stack,0,type.getSize(),false))
             {
-                return null;
+                return ItemStack.EMPTY;
             }
-            if (stack.stackSize==0)
+            if (stack.getCount()==0)
             {
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             }
             else
             {

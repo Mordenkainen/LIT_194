@@ -45,7 +45,7 @@ public class ContainerSolidGenerator extends Container{
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-        ItemStack previous = null;
+        ItemStack previous = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(index);
 
         if (slot!=null && slot.getHasStack())
@@ -59,7 +59,7 @@ public class ContainerSolidGenerator extends Container{
                 //from the te
                 if (!mergeItemStack(current,te.getSizeInventory(),te.getSizeInventory()+36,true))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
             else
@@ -71,30 +71,30 @@ public class ContainerSolidGenerator extends Container{
                 {
                     if (!mergeItemStack(current,0,1,false))
                     {
-                        return null;
+                        return ItemStack.EMPTY;
                     }
                 }
 
                 else //can neither burn nor smelt (so don't move it
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
 
-            if (current.stackSize == 0)
+            if (current.getCount() == 0)
             {
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             }
             else
             {
                 slot.onSlotChanged();
             }
 
-            if (current.stackSize == previous.stackSize)
+            if (current.getCount() == previous.getCount())
             {
-                return null;
+                return ItemStack.EMPTY;
             }
-            slot.func_82870_a(playerIn,current);
+            slot.onTake(playerIn,current);
         }
         return previous;
     }

@@ -2,7 +2,6 @@ package com.m4thg33k.lit.tiles;
 
 import com.m4thg33k.lit.api.furnace.FurnaceTypes;
 import com.m4thg33k.lit.core.util.ChatHelper;
-import com.m4thg33k.lit.core.util.LogHelper;
 import com.m4thg33k.lit.lib.Constants;
 import com.m4thg33k.lit.network.LITNetwork;
 import com.m4thg33k.lit.network.packets.PacketNBT;
@@ -10,7 +9,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,7 +16,6 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -120,7 +117,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
         {
             NBTTagCompound stackTag = list.getCompoundTagAt(i);
             int slot = stackTag.getByte("Slot")&255;
-            setInventorySlotContents(slot,ItemStack.func_77949_a(stackTag));
+            setInventorySlotContents(slot,new ItemStack(stackTag));
         }
 
         if (compound.hasKey("CustomName"))
@@ -155,7 +152,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
         {
             NBTTagCompound stackTag = list2.getCompoundTagAt(i);
             int slot = stackTag.getInteger("Slot");
-            this.upgrades[slot] = ItemStack.func_77949_a(stackTag);
+            this.upgrades[slot] = new ItemStack(stackTag);
         }
     }
 
@@ -259,7 +256,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
         if (this.getStackInSlot(index)!=null)
         {
             ItemStack itemstack;
-            if (getStackInSlot(index).stackSize <= count)
+            if (getStackInSlot(index).getCount() <= count)
             {
                 itemstack = getStackInSlot(index);
                 setInventorySlotContents(index,null);
@@ -268,7 +265,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
             }
             itemstack = this.getStackInSlot(index).splitStack(count);
 
-            if (getStackInSlot(index).stackSize<=0)
+            if (getStackInSlot(index).getCount()<=0)
             {
                 setInventorySlotContents(index,null);
             }
@@ -302,9 +299,9 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
         boolean flag = stack!=null && stack.isItemEqual(inventory[index]) && ItemStack.areItemStackTagsEqual(stack,inventory[index]);
         inventory[index] = stack;
 
-        if (stack != null && stack.stackSize > getInventoryStackLimit())
+        if (stack != null && stack.getCount() > getInventoryStackLimit())
         {
-            stack.stackSize = getInventoryStackLimit();
+            stack.setCount(getInventoryStackLimit());
         }
 
         if (index==1 && !flag)
@@ -433,8 +430,8 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
 
         storedFuel += fuelToAdd;
 
-        inventory[0].stackSize--;
-        if (inventory[0].stackSize==0)
+        inventory[0].shrink(1);
+        if (inventory[0].getCount()==0)
         {
             inventory[0] = inventory[0].getItem().getContainerItem(inventory[0]);
         }
@@ -565,7 +562,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
         {
             return false;
         }
-        int result = inventory[2].stackSize+output.stackSize;
+        int result = inventory[2].getCount()+output.getCount();
         return result<=getInventoryStackLimit() && result<=inventory[2].getMaxStackSize();
     }
 
@@ -581,7 +578,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
             }
             else if (inventory[2].getItem() == stack.getItem())
             {
-                inventory[2].stackSize += stack.stackSize;
+                inventory[2].grow(stack.getCount());
             }
 
             if (inventory[1].getItem() == Item.getItemFromBlock(Blocks.SPONGE) && inventory[1].getMetadata()==1 && inventory[0] != null && inventory[0].getItem() == Items.BUCKET)
@@ -589,9 +586,9 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
                 inventory[0] = new ItemStack(Items.WATER_BUCKET);
             }
 
-            inventory[1].stackSize--;
+            inventory[1].shrink(1);
 
-            if (inventory[1].stackSize<=0)
+            if (inventory[1].getCount()<=0)
             {
                 inventory[1] = null;
             }
@@ -666,7 +663,7 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
             float f3 = 0.05f;
 
             ItemStack theItem = upgrades[i].copy();
-            theItem.stackSize = 1;
+            theItem.setCount(1);
 
             EntityItem item = new EntityItem(world, pos.getX()+f,pos.getY()+f1,pos.getZ()+f2,theItem);
 
@@ -732,5 +729,15 @@ public class TileImprovedFurnace extends TileEntity implements ISidedInventory,I
             return false;
         }
         return false;
+    }
+    
+    @Override
+    public boolean isEmpty() {
+        for (ItemStack stack : inventory) {
+            if (stack != null) {
+                return false;
+            }
+        }
+        return true;
     }
 }

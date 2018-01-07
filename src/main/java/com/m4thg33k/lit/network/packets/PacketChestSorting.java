@@ -31,7 +31,6 @@ public class PacketChestSorting extends BaseThreadsafePacket{
     @Override
     public void handleServerSafe(NetHandlerPlayServer netHandler) {
         TileEntity tileEntity = netHandler.player.world.getTileEntity(pos);
-//        TileEntity tileEntity = netHandler.playerEntity.worldObj.getTileEntity(pos);
         if (tileEntity != null && tileEntity instanceof TileImprovedChest)
         {
             ((TileImprovedChest)tileEntity).performSort(sortType,forward);
